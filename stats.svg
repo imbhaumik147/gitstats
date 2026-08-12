@@ -1,16 +1,51 @@
-<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
-    <rect width="400" height="300" rx="12" fill="#0d1117"/>
-    <text x="30" y="45" fill="white" font-size="22" font-family="Arial, sans-serif" font-weight="bold">GitHub Statistics</text>
+<svg width="600" height="420" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        .header { font: bold 22px 'Segoe UI', Arial, sans-serif; fill: #58a6ff; }
+        .name { font: bold 18px 'Segoe UI', Arial, sans-serif; fill: #c9d1d9; }
+        .box { fill: #161b22; stroke: #30363d; stroke-width: 1; rx: 6; }
+        .box-num { font: bold 24px 'Segoe UI', Arial, sans-serif; fill: #ffffff; }
+        .box-text { font: 12px 'Segoe UI', Arial, sans-serif; fill: #8b949e; font-weight: bold; }
+        .title { font: bold 16px 'Segoe UI', Arial, sans-serif; fill: #c9d1d9; }
+        .lang-text { font: 14px 'Segoe UI', Arial, sans-serif; fill: #c9d1d9; }
+        .lang-pct { font: 14px 'Segoe UI', Arial, sans-serif; fill: #8b949e; text-anchor: end; }
+        .footer { font: 12px 'Segoe UI', Arial, sans-serif; fill: #8b949e; }
+    </style>
+    <rect width="600" height="420" rx="12" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
     
-    <text x="30" y="90" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Repositories:</text>
-    <text x="370" y="90" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">15</text>
+    <text x="40" y="50" class="header">⚡ GITHUB STATISTICS</text>
+    <text x="40" y="80" class="name">Bhaumik </text>
+    
+    <!-- Boxes -->
+    <rect x="40" y="110" width="160" height="80" class="box" />
+    <text x="120" y="150" class="box-num" text-anchor="middle">15</text>
+    <text x="120" y="175" class="box-text" text-anchor="middle">REPOS</text>
+    
+    <rect x="220" y="110" width="160" height="80" class="box" />
+    <text x="300" y="150" class="box-num" text-anchor="middle">20</text>
+    <text x="300" y="175" class="box-text" text-anchor="middle">STARS</text>
+    
+    <rect x="400" y="110" width="160" height="80" class="box" />
+    <text x="480" y="150" class="box-num" text-anchor="middle">145</text>
+    <text x="480" y="175" class="box-text" text-anchor="middle">COMMITS (30D)</text>
+    
+    <!-- Languages -->
+    <text x="40" y="240" class="title">TOP LANGUAGES</text>
+    <text x="40" y="270" class="lang-text">PHP</text>
+    <text x="490" y="270" class="lang-pct">73.2%</text>
+    <rect x="170" y="260" width="300" height="10" rx="5" fill="#21262d"/>
+    <rect x="170" y="260" width="219" height="10" rx="5" fill="#f1e05a"/>
+    <text x="40" y="300" class="lang-text">HTML</text>
+    <text x="490" y="300" class="lang-pct">13.9%</text>
+    <rect x="170" y="290" width="300" height="10" rx="5" fill="#21262d"/>
+    <rect x="170" y="290" width="41" height="10" rx="5" fill="#4F5D95"/>
+    <text x="40" y="330" class="lang-text">Python</text>
+    <text x="490" y="330" class="lang-pct">8.6%</text>
+    <rect x="170" y="320" width="300" height="10" rx="5" fill="#21262d"/>
+    <rect x="170" y="320" width="25" height="10" rx="5" fill="#00B4AB"/>
+    <text x="40" y="360" class="lang-text">CSS</text>
+    <text x="490" y="360" class="lang-pct">2.4%</text>
+    <rect x="170" y="350" width="300" height="10" rx="5" fill="#21262d"/>
+    <rect x="170" y="350" width="7" height="10" rx="5" fill="#e34c26"/>
 
-    <text x="30" y="125" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Stars Earned:</text>
-    <text x="370" y="125" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">19</text>
-
-    <text x="30" y="160" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Commits (Last 30 Days):</text>
-    <text x="370" y="160" fill="#58a6ff" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">141</text>
-
-    <text x="30" y="195" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Pull Requests:</text>
-    <text x="370" y="195" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">13</text>
+    <text x="40" y="400" class="footer">Updated: 12 Aug 2026</text>
 </svg>
