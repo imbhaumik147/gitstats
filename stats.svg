@@ -1,14 +1,19 @@
-<svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
-    <rect width="600" height="300" rx="12" fill="#0d1117"/>
-    <text x="30" y="45" fill="white" font-size="24" font-family="Arial">GitHub Statistics - imbhaumik147</text>
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="300" rx="12" fill="#0d1117"/>
+    <text x="30" y="45" fill="white" font-size="22" font-family="Arial, sans-serif" font-weight="bold">GitHub Statistics</text>
     
-    <text x="30" y="90" fill="white" font-size="18" font-family="Arial">Repositories: 8</text>
-    <text x="30" y="125" fill="white" font-size="18" font-family="Arial">Stars: 14</text>
-    <text x="30" y="160" fill="white" font-size="18" font-family="Arial">Forks: 0</text>
-    
-    <text x="300" y="90" fill="white" font-size="18" font-family="Arial">Top Languages:</text>
-    <text x="300" y="125" fill="white" font-size="16" font-family="Arial">JavaScript: 36.4%</text>
-    <text x="300" y="155" fill="white" font-size="16" font-family="Arial">CSS: 35.0%</text>
-    <text x="300" y="185" fill="white" font-size="16" font-family="Arial">HTML: 21.6%</text>
-    <text x="300" y="215" fill="white" font-size="16" font-family="Arial">Python: 7.0%</text>
+    <text x="30" y="90" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Repositories:</text>
+    <text x="370" y="90" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">8</text>
+
+    <text x="30" y="125" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Stars Earned:</text>
+    <text x="370" y="125" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">14</text>
+
+    <text x="30" y="160" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Total Commits:</text>
+    <text x="370" y="160" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">40</text>
+
+    <text x="30" y="195" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Commits (Last 30 Days):</text>
+    <text x="370" y="195" fill="#58a6ff" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">19</text>
+
+    <text x="30" y="230" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Pull Requests:</text>
+    <text x="370" y="230" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">0</text>
 </svg>
