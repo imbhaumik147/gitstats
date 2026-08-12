@@ -79,3 +79,32 @@ with open("stats.svg", "w", encoding="utf-8") as f:
     f.write(svg)
 
 print("Generated stats.svg successfully!")
+
+# 5. Generate Languages SVG
+lang_svg = f"""<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="300" rx="12" fill="#0d1117"/>
+    <text x="30" y="45" fill="white" font-size="22" font-family="Arial, sans-serif" font-weight="bold">Most Used Languages</text>
+"""
+
+y_pos = 90
+for lang, pct in top_languages:
+    # We can use simple bar widths
+    bar_width = int(pct * 2.5) # Scale to fit 250px max width
+    
+    # Language name and percentage
+    lang_svg += f'    <text x="30" y="{y_pos}" fill="#c9d1d9" font-size="14" font-family="Arial, sans-serif">{lang}</text>\n'
+    lang_svg += f'    <text x="330" y="{y_pos}" fill="#8b949e" font-size="14" font-family="Arial, sans-serif" text-anchor="end">{pct:.1f}%</text>\n'
+    
+    # Progress bar background
+    lang_svg += f'    <rect x="30" y="{y_pos + 8}" width="300" height="8" rx="4" fill="#21262d"/>\n'
+    # Progress bar fill (using a default color, ideally you'd map languages to colors)
+    lang_svg += f'    <rect x="30" y="{y_pos + 8}" width="{bar_width}" height="8" rx="4" fill="#58a6ff"/>\n'
+    
+    y_pos += 45
+
+lang_svg += "</svg>"
+
+with open("languages.svg", "w", encoding="utf-8") as f:
+    f.write(lang_svg)
+
+print("Generated languages.svg successfully!")
