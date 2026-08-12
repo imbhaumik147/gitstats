@@ -94,14 +94,11 @@ svg = f"""<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
     <text x="30" y="125" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Stars Earned:</text>
     <text x="370" y="125" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">{total_stars}</text>
 
-    <text x="30" y="160" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Total Commits:</text>
-    <text x="370" y="160" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">{total_commits}</text>
+    <text x="30" y="160" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Commits (Last 30 Days):</text>
+    <text x="370" y="160" fill="#58a6ff" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">{recent_commits}</text>
 
-    <text x="30" y="195" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Commits (Last 30 Days):</text>
-    <text x="370" y="195" fill="#58a6ff" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">{recent_commits}</text>
-
-    <text x="30" y="230" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Pull Requests:</text>
-    <text x="370" y="230" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">{total_prs}</text>
+    <text x="30" y="195" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Pull Requests:</text>
+    <text x="370" y="195" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">{total_prs}</text>
 </svg>"""
 
 with open("stats.svg", "w", encoding="utf-8") as f:
