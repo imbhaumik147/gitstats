@@ -4,7 +4,7 @@
     <text x="30" y="90" fill="#c9d1d9" font-size="14" font-family="Arial, sans-serif">JavaScript</text>
     <text x="330" y="90" fill="#8b949e" font-size="14" font-family="Arial, sans-serif" text-anchor="end">35.6%</text>
     <rect x="30" y="98" width="300" height="8" rx="4" fill="#21262d"/>
-    <rect x="30" y="98" width="89" height="8" rx="4" fill="#58a6ff"/>
+    <rect x="30" y="98" width="88" height="8" rx="4" fill="#58a6ff"/>
     <text x="30" y="135" fill="#c9d1d9" font-size="14" font-family="Arial, sans-serif">CSS</text>
     <text x="330" y="135" fill="#8b949e" font-size="14" font-family="Arial, sans-serif" text-anchor="end">34.2%</text>
     <rect x="30" y="143" width="300" height="8" rx="4" fill="#21262d"/>
@@ -14,7 +14,7 @@
     <rect x="30" y="188" width="300" height="8" rx="4" fill="#21262d"/>
     <rect x="30" y="188" width="52" height="8" rx="4" fill="#58a6ff"/>
     <text x="30" y="225" fill="#c9d1d9" font-size="14" font-family="Arial, sans-serif">Python</text>
-    <text x="330" y="225" fill="#8b949e" font-size="14" font-family="Arial, sans-serif" text-anchor="end">9.0%</text>
+    <text x="330" y="225" fill="#8b949e" font-size="14" font-family="Arial, sans-serif" text-anchor="end">9.1%</text>
     <rect x="30" y="233" width="300" height="8" rx="4" fill="#21262d"/>
     <rect x="30" y="233" width="22" height="8" rx="4" fill="#58a6ff"/>
 </svg>
