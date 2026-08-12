@@ -8,12 +8,9 @@
     <text x="30" y="125" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Stars Earned:</text>
     <text x="370" y="125" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">19</text>
 
-    <text x="30" y="160" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Total Commits:</text>
-    <text x="370" y="160" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">422</text>
+    <text x="30" y="160" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Commits (Last 30 Days):</text>
+    <text x="370" y="160" fill="#58a6ff" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">141</text>
 
-    <text x="30" y="195" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Commits (Last 30 Days):</text>
-    <text x="370" y="195" fill="#58a6ff" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">140</text>
-
-    <text x="30" y="230" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Pull Requests:</text>
-    <text x="370" y="230" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">13</text>
+    <text x="30" y="195" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Pull Requests:</text>
+    <text x="370" y="195" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">13</text>
 </svg>
