@@ -1,97 +1,108 @@
 <svg width="400" height="150" xmlns="http://www.w3.org/2000/svg">
             <style>
                 .title { font: bold 16px 'Segoe UI', Arial, sans-serif; fill: #c9d1d9; }
+                .date { font: 10px 'Segoe UI', Arial, sans-serif; fill: #8b949e; }
+                .line { fill: none; stroke: #39d353; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+                .area { fill: #39d353; opacity: 0.15; }
             </style>
             <rect width="400" height="150" rx="12" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
             <text x="20" y="30" class="title">Commit Activity (Last 30 Days)</text>
-            <g><title>5 commits on 2026-07-14</title>
-        <rect x="20" y="80" width="8" height="40" fill="#006d32" rx="2"/>
+            <text x="20" y="135" class="date" text-anchor="start">07-14</text>
+    <text x="104" y="135" class="date" text-anchor="middle">07-21</text>
+    <text x="188" y="135" class="date" text-anchor="middle">07-28</text>
+    <text x="272" y="135" class="date" text-anchor="middle">08-04</text>
+    <text x="356" y="135" class="date" text-anchor="middle">08-11</text>
+    <text x="368" y="135" class="date" text-anchor="end">08-12</text>
+    <path d="M 20,110 L 20,100.54054054054055 L 32,108.10810810810811 L 44,98.64864864864865 L 56,100.54054054054055 L 68,110.0 L 80,110.0 L 92,104.32432432432432 L 104,96.75675675675676 L 116,104.32432432432432 L 128,106.21621621621621 L 140,100.54054054054055 L 152,108.10810810810811 L 164,110.0 L 176,102.43243243243244 L 188,104.32432432432432 L 200,94.86486486486487 L 212,83.51351351351352 L 224,98.64864864864865 L 236,100.54054054054055 L 248,110.0 L 260,91.08108108108108 L 272,106.21621621621621 L 284,106.21621621621621 L 296,108.10810810810811 L 308,108.10810810810811 L 320,110.0 L 332,110.0 L 344,94.86486486486487 L 356,74.05405405405406 L 368,40.0 L 368,110 Z" class="area" />
+    <path d="M 20,100.54054054054055 L 32,108.10810810810811 L 44,98.64864864864865 L 56,100.54054054054055 L 68,110.0 L 80,110.0 L 92,104.32432432432432 L 104,96.75675675675676 L 116,104.32432432432432 L 128,106.21621621621621 L 140,100.54054054054055 L 152,108.10810810810811 L 164,110.0 L 176,102.43243243243244 L 188,104.32432432432432 L 200,94.86486486486487 L 212,83.51351351351352 L 224,98.64864864864865 L 236,100.54054054054055 L 248,110.0 L 260,91.08108108108108 L 272,106.21621621621621 L 284,106.21621621621621 L 296,108.10810810810811 L 308,108.10810810810811 L 320,110.0 L 332,110.0 L 344,94.86486486486487 L 356,74.05405405405406 L 368,40.0" class="line" />
+    <g><title>5 commits on 2026-07-14</title>
+        <circle cx="20" cy="100.54054054054055" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>1 commits on 2026-07-15</title>
-        <rect x="32" y="112" width="8" height="8" fill="#0e4429" rx="2"/>
+        <circle cx="32" cy="108.10810810810811" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>6 commits on 2026-07-16</title>
-        <rect x="44" y="72" width="8" height="48" fill="#26a641" rx="2"/>
+        <circle cx="44" cy="98.64864864864865" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>5 commits on 2026-07-17</title>
-        <rect x="56" y="80" width="8" height="40" fill="#006d32" rx="2"/>
+        <circle cx="56" cy="100.54054054054055" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>0 commits on 2026-07-18</title>
-        <rect x="68" y="116" width="8" height="4" fill="#161b22" rx="2"/>
+        <circle cx="68" cy="110.0" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>0 commits on 2026-07-19</title>
-        <rect x="80" y="116" width="8" height="4" fill="#161b22" rx="2"/>
+        <circle cx="80" cy="110.0" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>3 commits on 2026-07-20</title>
-        <rect x="92" y="96" width="8" height="24" fill="#006d32" rx="2"/>
+        <circle cx="92" cy="104.32432432432432" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>7 commits on 2026-07-21</title>
-        <rect x="104" y="64" width="8" height="56" fill="#26a641" rx="2"/>
+        <circle cx="104" cy="96.75675675675676" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>3 commits on 2026-07-22</title>
-        <rect x="116" y="96" width="8" height="24" fill="#006d32" rx="2"/>
+        <circle cx="116" cy="104.32432432432432" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>2 commits on 2026-07-23</title>
-        <rect x="128" y="104" width="8" height="16" fill="#0e4429" rx="2"/>
+        <circle cx="128" cy="106.21621621621621" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>5 commits on 2026-07-24</title>
-        <rect x="140" y="80" width="8" height="40" fill="#006d32" rx="2"/>
+        <circle cx="140" cy="100.54054054054055" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>1 commits on 2026-07-25</title>
-        <rect x="152" y="112" width="8" height="8" fill="#0e4429" rx="2"/>
+        <circle cx="152" cy="108.10810810810811" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>0 commits on 2026-07-26</title>
-        <rect x="164" y="116" width="8" height="4" fill="#161b22" rx="2"/>
+        <circle cx="164" cy="110.0" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>4 commits on 2026-07-27</title>
-        <rect x="176" y="88" width="8" height="32" fill="#006d32" rx="2"/>
+        <circle cx="176" cy="102.43243243243244" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>3 commits on 2026-07-28</title>
-        <rect x="188" y="96" width="8" height="24" fill="#006d32" rx="2"/>
+        <circle cx="188" cy="104.32432432432432" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>8 commits on 2026-07-29</title>
-        <rect x="200" y="56" width="8" height="64" fill="#26a641" rx="2"/>
+        <circle cx="200" cy="94.86486486486487" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>14 commits on 2026-07-30</title>
-        <rect x="212" y="40" width="8" height="80" fill="#39d353" rx="2"/>
+        <circle cx="212" cy="83.51351351351352" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>6 commits on 2026-07-31</title>
-        <rect x="224" y="72" width="8" height="48" fill="#26a641" rx="2"/>
+        <circle cx="224" cy="98.64864864864865" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>5 commits on 2026-08-01</title>
-        <rect x="236" y="80" width="8" height="40" fill="#006d32" rx="2"/>
+        <circle cx="236" cy="100.54054054054055" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>0 commits on 2026-08-02</title>
-        <rect x="248" y="116" width="8" height="4" fill="#161b22" rx="2"/>
+        <circle cx="248" cy="110.0" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>10 commits on 2026-08-03</title>
-        <rect x="260" y="40" width="8" height="80" fill="#39d353" rx="2"/>
+        <circle cx="260" cy="91.08108108108108" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>2 commits on 2026-08-04</title>
-        <rect x="272" y="104" width="8" height="16" fill="#0e4429" rx="2"/>
+        <circle cx="272" cy="106.21621621621621" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>2 commits on 2026-08-05</title>
-        <rect x="284" y="104" width="8" height="16" fill="#0e4429" rx="2"/>
+        <circle cx="284" cy="106.21621621621621" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>1 commits on 2026-08-06</title>
-        <rect x="296" y="112" width="8" height="8" fill="#0e4429" rx="2"/>
+        <circle cx="296" cy="108.10810810810811" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>1 commits on 2026-08-07</title>
-        <rect x="308" y="112" width="8" height="8" fill="#0e4429" rx="2"/>
+        <circle cx="308" cy="108.10810810810811" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>0 commits on 2026-08-08</title>
-        <rect x="320" y="116" width="8" height="4" fill="#161b22" rx="2"/>
+        <circle cx="320" cy="110.0" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>0 commits on 2026-08-09</title>
-        <rect x="332" y="116" width="8" height="4" fill="#161b22" rx="2"/>
+        <circle cx="332" cy="110.0" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>8 commits on 2026-08-10</title>
-        <rect x="344" y="56" width="8" height="64" fill="#26a641" rx="2"/>
+        <circle cx="344" cy="94.86486486486487" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
     <g><title>19 commits on 2026-08-11</title>
-        <rect x="356" y="40" width="8" height="80" fill="#39d353" rx="2"/>
+        <circle cx="356" cy="74.05405405405406" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
-    <g><title>36 commits on 2026-08-12</title>
-        <rect x="368" y="40" width="8" height="80" fill="#39d353" rx="2"/>
+    <g><title>37 commits on 2026-08-12</title>
+        <circle cx="368" cy="40.0" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
     </g>
 </svg>
