@@ -1,108 +1,178 @@
-<svg width="400" height="150" xmlns="http://www.w3.org/2000/svg">
+<svg width="800" height="300" xmlns="http://www.w3.org/2000/svg">
             <style>
-                .title { font: bold 16px 'Segoe UI', Arial, sans-serif; fill: #c9d1d9; }
-                .date { font: 10px 'Segoe UI', Arial, sans-serif; fill: #8b949e; }
-                .line { fill: none; stroke: #39d353; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
-                .area { fill: #39d353; opacity: 0.15; }
+                .bg { fill: #0d1117; }
+                .title { font: bold 20px 'Segoe UI', Arial, sans-serif; fill: #38bdf8; }
+                .axis-label { font: bold 12px 'Segoe UI', Arial, sans-serif; fill: #38bdf8; }
+                .tick-label { font: 12px 'Segoe UI', Arial, sans-serif; fill: #c9d1d9; }
+                .grid { stroke: #30363d; stroke-width: 1; stroke-dasharray: 4 4; }
+                .line { fill: none; stroke: #38bdf8; stroke-width: 4; stroke-linejoin: round; }
+                .dot { fill: #ffffff; stroke: #38bdf8; stroke-width: 2; }
             </style>
-            <rect width="400" height="150" rx="12" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
-            <text x="20" y="30" class="title">Commit Activity (Last 30 Days)</text>
-            <text x="20" y="135" class="date" text-anchor="start">07-14</text>
-    <text x="104" y="135" class="date" text-anchor="middle">07-21</text>
-    <text x="188" y="135" class="date" text-anchor="middle">07-28</text>
-    <text x="272" y="135" class="date" text-anchor="middle">08-04</text>
-    <text x="356" y="135" class="date" text-anchor="middle">08-11</text>
-    <text x="368" y="135" class="date" text-anchor="end">08-12</text>
-    <path d="M 20,110 L 20,100.54054054054055 L 32,108.10810810810811 L 44,98.64864864864865 L 56,100.54054054054055 L 68,110.0 L 80,110.0 L 92,104.32432432432432 L 104,96.75675675675676 L 116,104.32432432432432 L 128,106.21621621621621 L 140,100.54054054054055 L 152,108.10810810810811 L 164,110.0 L 176,102.43243243243244 L 188,104.32432432432432 L 200,94.86486486486487 L 212,83.51351351351352 L 224,98.64864864864865 L 236,100.54054054054055 L 248,110.0 L 260,91.08108108108108 L 272,106.21621621621621 L 284,106.21621621621621 L 296,108.10810810810811 L 308,108.10810810810811 L 320,110.0 L 332,110.0 L 344,94.86486486486487 L 356,74.05405405405406 L 368,40.0 L 368,110 Z" class="area" />
-    <path d="M 20,100.54054054054055 L 32,108.10810810810811 L 44,98.64864864864865 L 56,100.54054054054055 L 68,110.0 L 80,110.0 L 92,104.32432432432432 L 104,96.75675675675676 L 116,104.32432432432432 L 128,106.21621621621621 L 140,100.54054054054055 L 152,108.10810810810811 L 164,110.0 L 176,102.43243243243244 L 188,104.32432432432432 L 200,94.86486486486487 L 212,83.51351351351352 L 224,98.64864864864865 L 236,100.54054054054055 L 248,110.0 L 260,91.08108108108108 L 272,106.21621621621621 L 284,106.21621621621621 L 296,108.10810810810811 L 308,108.10810810810811 L 320,110.0 L 332,110.0 L 344,94.86486486486487 L 356,74.05405405405406 L 368,40.0" class="line" />
+            <rect width="800" height="300" rx="12" class="bg" stroke="#30363d" stroke-width="1"/>
+            <text x="400" y="40" class="title" text-anchor="middle">Bhaumik 's Contribution Graph</text>
+            
+            <!-- Axis Titles -->
+            <text x="25" y="155" class="axis-label" text-anchor="middle" transform="rotate(-90 25,155)">Contributions</text>
+            <text x="420" y="285" class="axis-label" text-anchor="middle">Days</text>
+            <line x1="70" y1="250.0" x2="770" y2="250.0" class="grid"/>
+    <text x="55" y="254.0" class="tick-label" text-anchor="end">0</text>
+    <line x1="70" y1="202.5" x2="770" y2="202.5" class="grid"/>
+    <text x="55" y="206.5" class="tick-label" text-anchor="end">10</text>
+    <line x1="70" y1="155.0" x2="770" y2="155.0" class="grid"/>
+    <text x="55" y="159.0" class="tick-label" text-anchor="end">20</text>
+    <line x1="70" y1="107.5" x2="770" y2="107.5" class="grid"/>
+    <text x="55" y="111.5" class="tick-label" text-anchor="end">30</text>
+    <line x1="70" y1="60.0" x2="770" y2="60.0" class="grid"/>
+    <text x="55" y="64.0" class="tick-label" text-anchor="end">40</text>
+    <line x1="70.0" y1="60" x2="70.0" y2="250" class="grid"/>
+    <text x="70.0" y="270" class="tick-label" text-anchor="middle">14</text>
+    <line x1="94.13793103448276" y1="60" x2="94.13793103448276" y2="250" class="grid"/>
+    <text x="94.13793103448276" y="270" class="tick-label" text-anchor="middle">15</text>
+    <line x1="118.27586206896552" y1="60" x2="118.27586206896552" y2="250" class="grid"/>
+    <text x="118.27586206896552" y="270" class="tick-label" text-anchor="middle">16</text>
+    <line x1="142.41379310344826" y1="60" x2="142.41379310344826" y2="250" class="grid"/>
+    <text x="142.41379310344826" y="270" class="tick-label" text-anchor="middle">17</text>
+    <line x1="166.55172413793105" y1="60" x2="166.55172413793105" y2="250" class="grid"/>
+    <text x="166.55172413793105" y="270" class="tick-label" text-anchor="middle">18</text>
+    <line x1="190.6896551724138" y1="60" x2="190.6896551724138" y2="250" class="grid"/>
+    <text x="190.6896551724138" y="270" class="tick-label" text-anchor="middle">19</text>
+    <line x1="214.82758620689654" y1="60" x2="214.82758620689654" y2="250" class="grid"/>
+    <text x="214.82758620689654" y="270" class="tick-label" text-anchor="middle">20</text>
+    <line x1="238.96551724137933" y1="60" x2="238.96551724137933" y2="250" class="grid"/>
+    <text x="238.96551724137933" y="270" class="tick-label" text-anchor="middle">21</text>
+    <line x1="263.1034482758621" y1="60" x2="263.1034482758621" y2="250" class="grid"/>
+    <text x="263.1034482758621" y="270" class="tick-label" text-anchor="middle">22</text>
+    <line x1="287.2413793103448" y1="60" x2="287.2413793103448" y2="250" class="grid"/>
+    <text x="287.2413793103448" y="270" class="tick-label" text-anchor="middle">23</text>
+    <line x1="311.3793103448276" y1="60" x2="311.3793103448276" y2="250" class="grid"/>
+    <text x="311.3793103448276" y="270" class="tick-label" text-anchor="middle">24</text>
+    <line x1="335.51724137931035" y1="60" x2="335.51724137931035" y2="250" class="grid"/>
+    <text x="335.51724137931035" y="270" class="tick-label" text-anchor="middle">25</text>
+    <line x1="359.6551724137931" y1="60" x2="359.6551724137931" y2="250" class="grid"/>
+    <text x="359.6551724137931" y="270" class="tick-label" text-anchor="middle">26</text>
+    <line x1="383.7931034482759" y1="60" x2="383.7931034482759" y2="250" class="grid"/>
+    <text x="383.7931034482759" y="270" class="tick-label" text-anchor="middle">27</text>
+    <line x1="407.93103448275866" y1="60" x2="407.93103448275866" y2="250" class="grid"/>
+    <text x="407.93103448275866" y="270" class="tick-label" text-anchor="middle">28</text>
+    <line x1="432.0689655172414" y1="60" x2="432.0689655172414" y2="250" class="grid"/>
+    <text x="432.0689655172414" y="270" class="tick-label" text-anchor="middle">29</text>
+    <line x1="456.2068965517241" y1="60" x2="456.2068965517241" y2="250" class="grid"/>
+    <text x="456.2068965517241" y="270" class="tick-label" text-anchor="middle">30</text>
+    <line x1="480.34482758620686" y1="60" x2="480.34482758620686" y2="250" class="grid"/>
+    <text x="480.34482758620686" y="270" class="tick-label" text-anchor="middle">31</text>
+    <line x1="504.48275862068965" y1="60" x2="504.48275862068965" y2="250" class="grid"/>
+    <text x="504.48275862068965" y="270" class="tick-label" text-anchor="middle">1</text>
+    <line x1="528.6206896551723" y1="60" x2="528.6206896551723" y2="250" class="grid"/>
+    <text x="528.6206896551723" y="270" class="tick-label" text-anchor="middle">2</text>
+    <line x1="552.7586206896552" y1="60" x2="552.7586206896552" y2="250" class="grid"/>
+    <text x="552.7586206896552" y="270" class="tick-label" text-anchor="middle">3</text>
+    <line x1="576.8965517241379" y1="60" x2="576.8965517241379" y2="250" class="grid"/>
+    <text x="576.8965517241379" y="270" class="tick-label" text-anchor="middle">4</text>
+    <line x1="601.0344827586207" y1="60" x2="601.0344827586207" y2="250" class="grid"/>
+    <text x="601.0344827586207" y="270" class="tick-label" text-anchor="middle">5</text>
+    <line x1="625.1724137931035" y1="60" x2="625.1724137931035" y2="250" class="grid"/>
+    <text x="625.1724137931035" y="270" class="tick-label" text-anchor="middle">6</text>
+    <line x1="649.3103448275862" y1="60" x2="649.3103448275862" y2="250" class="grid"/>
+    <text x="649.3103448275862" y="270" class="tick-label" text-anchor="middle">7</text>
+    <line x1="673.448275862069" y1="60" x2="673.448275862069" y2="250" class="grid"/>
+    <text x="673.448275862069" y="270" class="tick-label" text-anchor="middle">8</text>
+    <line x1="697.5862068965517" y1="60" x2="697.5862068965517" y2="250" class="grid"/>
+    <text x="697.5862068965517" y="270" class="tick-label" text-anchor="middle">9</text>
+    <line x1="721.7241379310344" y1="60" x2="721.7241379310344" y2="250" class="grid"/>
+    <text x="721.7241379310344" y="270" class="tick-label" text-anchor="middle">10</text>
+    <line x1="745.8620689655173" y1="60" x2="745.8620689655173" y2="250" class="grid"/>
+    <text x="745.8620689655173" y="270" class="tick-label" text-anchor="middle">11</text>
+    <line x1="770.0" y1="60" x2="770.0" y2="250" class="grid"/>
+    <text x="770.0" y="270" class="tick-label" text-anchor="middle">12</text>
+    <path d="M 70.0,226.25 L 94.13793103448276,245.25 L 118.27586206896552,221.5 L 142.41379310344826,226.25 L 166.55172413793105,250.0 L 190.6896551724138,250.0 L 214.82758620689654,235.75 L 238.96551724137933,216.75 L 263.1034482758621,235.75 L 287.2413793103448,240.5 L 311.3793103448276,226.25 L 335.51724137931035,245.25 L 359.6551724137931,250.0 L 383.7931034482759,231.0 L 407.93103448275866,235.75 L 432.0689655172414,212.0 L 456.2068965517241,183.5 L 480.34482758620686,221.5 L 504.48275862068965,226.25 L 528.6206896551723,250.0 L 552.7586206896552,202.5 L 576.8965517241379,240.5 L 601.0344827586207,240.5 L 625.1724137931035,245.25 L 649.3103448275862,245.25 L 673.448275862069,250.0 L 697.5862068965517,250.0 L 721.7241379310344,212.0 L 745.8620689655173,159.75 L 770.0,79.0" class="line" />
     <g><title>5 commits on 2026-07-14</title>
-        <circle cx="20" cy="100.54054054054055" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="70.0" cy="226.25" r="4" class="dot"/>
     </g>
     <g><title>1 commits on 2026-07-15</title>
-        <circle cx="32" cy="108.10810810810811" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="94.13793103448276" cy="245.25" r="4" class="dot"/>
     </g>
     <g><title>6 commits on 2026-07-16</title>
-        <circle cx="44" cy="98.64864864864865" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="118.27586206896552" cy="221.5" r="4" class="dot"/>
     </g>
     <g><title>5 commits on 2026-07-17</title>
-        <circle cx="56" cy="100.54054054054055" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="142.41379310344826" cy="226.25" r="4" class="dot"/>
     </g>
     <g><title>0 commits on 2026-07-18</title>
-        <circle cx="68" cy="110.0" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="166.55172413793105" cy="250.0" r="4" class="dot"/>
     </g>
     <g><title>0 commits on 2026-07-19</title>
-        <circle cx="80" cy="110.0" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="190.6896551724138" cy="250.0" r="4" class="dot"/>
     </g>
     <g><title>3 commits on 2026-07-20</title>
-        <circle cx="92" cy="104.32432432432432" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="214.82758620689654" cy="235.75" r="4" class="dot"/>
     </g>
     <g><title>7 commits on 2026-07-21</title>
-        <circle cx="104" cy="96.75675675675676" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="238.96551724137933" cy="216.75" r="4" class="dot"/>
     </g>
     <g><title>3 commits on 2026-07-22</title>
-        <circle cx="116" cy="104.32432432432432" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="263.1034482758621" cy="235.75" r="4" class="dot"/>
     </g>
     <g><title>2 commits on 2026-07-23</title>
-        <circle cx="128" cy="106.21621621621621" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="287.2413793103448" cy="240.5" r="4" class="dot"/>
     </g>
     <g><title>5 commits on 2026-07-24</title>
-        <circle cx="140" cy="100.54054054054055" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="311.3793103448276" cy="226.25" r="4" class="dot"/>
     </g>
     <g><title>1 commits on 2026-07-25</title>
-        <circle cx="152" cy="108.10810810810811" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="335.51724137931035" cy="245.25" r="4" class="dot"/>
     </g>
     <g><title>0 commits on 2026-07-26</title>
-        <circle cx="164" cy="110.0" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="359.6551724137931" cy="250.0" r="4" class="dot"/>
     </g>
     <g><title>4 commits on 2026-07-27</title>
-        <circle cx="176" cy="102.43243243243244" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="383.7931034482759" cy="231.0" r="4" class="dot"/>
     </g>
     <g><title>3 commits on 2026-07-28</title>
-        <circle cx="188" cy="104.32432432432432" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="407.93103448275866" cy="235.75" r="4" class="dot"/>
     </g>
     <g><title>8 commits on 2026-07-29</title>
-        <circle cx="200" cy="94.86486486486487" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="432.0689655172414" cy="212.0" r="4" class="dot"/>
     </g>
     <g><title>14 commits on 2026-07-30</title>
-        <circle cx="212" cy="83.51351351351352" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="456.2068965517241" cy="183.5" r="4" class="dot"/>
     </g>
     <g><title>6 commits on 2026-07-31</title>
-        <circle cx="224" cy="98.64864864864865" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="480.34482758620686" cy="221.5" r="4" class="dot"/>
     </g>
     <g><title>5 commits on 2026-08-01</title>
-        <circle cx="236" cy="100.54054054054055" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="504.48275862068965" cy="226.25" r="4" class="dot"/>
     </g>
     <g><title>0 commits on 2026-08-02</title>
-        <circle cx="248" cy="110.0" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="528.6206896551723" cy="250.0" r="4" class="dot"/>
     </g>
     <g><title>10 commits on 2026-08-03</title>
-        <circle cx="260" cy="91.08108108108108" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="552.7586206896552" cy="202.5" r="4" class="dot"/>
     </g>
     <g><title>2 commits on 2026-08-04</title>
-        <circle cx="272" cy="106.21621621621621" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="576.8965517241379" cy="240.5" r="4" class="dot"/>
     </g>
     <g><title>2 commits on 2026-08-05</title>
-        <circle cx="284" cy="106.21621621621621" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="601.0344827586207" cy="240.5" r="4" class="dot"/>
     </g>
     <g><title>1 commits on 2026-08-06</title>
-        <circle cx="296" cy="108.10810810810811" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="625.1724137931035" cy="245.25" r="4" class="dot"/>
     </g>
     <g><title>1 commits on 2026-08-07</title>
-        <circle cx="308" cy="108.10810810810811" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="649.3103448275862" cy="245.25" r="4" class="dot"/>
     </g>
     <g><title>0 commits on 2026-08-08</title>
-        <circle cx="320" cy="110.0" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="673.448275862069" cy="250.0" r="4" class="dot"/>
     </g>
     <g><title>0 commits on 2026-08-09</title>
-        <circle cx="332" cy="110.0" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="697.5862068965517" cy="250.0" r="4" class="dot"/>
     </g>
     <g><title>8 commits on 2026-08-10</title>
-        <circle cx="344" cy="94.86486486486487" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="721.7241379310344" cy="212.0" r="4" class="dot"/>
     </g>
     <g><title>19 commits on 2026-08-11</title>
-        <circle cx="356" cy="74.05405405405406" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+        <circle cx="745.8620689655173" cy="159.75" r="4" class="dot"/>
     </g>
-    <g><title>37 commits on 2026-08-12</title>
-        <circle cx="368" cy="40.0" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>
+    <g><title>36 commits on 2026-08-12</title>
+        <circle cx="770.0" cy="79.0" r="4" class="dot"/>
     </g>
 </svg>
