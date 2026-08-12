@@ -156,7 +156,7 @@ if graph_resp.status_code == 200:
         max_count = max([day['contributionCount'] for day in last_30_days] + [1])
         y_max = max(5, ((max_count + 4) // 5) * 5)
         
-        graph_svg = f"""<svg width="{W}" height="{H}" xmlns="http://www.w3.org/2000/svg">
+        graph_svg = f"""<svg width="100%" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg">
             <style>
                 .bg {{ fill: #0d1117; }}
                 .title {{ font: bold 20px 'Segoe UI', Arial, sans-serif; fill: #38bdf8; }}
