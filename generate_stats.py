@@ -129,58 +129,60 @@ graph_resp = requests.post(
 
 if graph_resp.status_code == 200:
     data = graph_resp.json()
-    weeks = data['data']['user']['contributionsCollection']['contributionCalendar']['weeks']
-    # Get last 5 weeks to cover ~30 days
-    recent_weeks = weeks[-5:]
-    
-    # Flatten all days
-    all_days = []
-    for w in recent_weeks:
-        all_days.extend(w['contributionDays'])
+    if 'errors' in data or 'data' not in data:
+        print(f"GraphQL Error: {data}")
+        # Create a fallback graph.svg with the error
+        with open("graph.svg", "w", encoding="utf-8") as f:
+            f.write('<svg width="400" height="150" xmlns="http://www.w3.org/2000/svg"><text x="20" y="50" fill="red">GraphQL Error. Check Action logs.</text></svg>')
+    else:
+        weeks = data['data']['user']['contributionsCollection']['contributionCalendar']['weeks']
+        # Get last 5 weeks to cover ~30 days
+        recent_weeks = weeks[-5:]
         
-    last_30_days = all_days[-30:]
-    
-    # Generate graph.svg (a beautiful minimal bar chart for the last 30 days)
-    graph_svg = f"""<svg width="400" height="150" xmlns="http://www.w3.org/2000/svg">
-        <style>
-            .title {{ font: bold 16px 'Segoe UI', Arial, sans-serif; fill: #c9d1d9; }}
-        </style>
-        <rect width="400" height="150" rx="12" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
-        <text x="20" y="30" class="title">Commit Activity (Last 30 Days)</text>
-    """
-    
-    # Calculate spacing (400 width total, 30 bars)
-    # Available width: 360, so 12px per bar including gap
-    x_pos = 20
-    for day in last_30_days:
-        count = day['contributionCount']
-        # The API already returns proper colors (e.g. #ebedf0, #9be9a8, etc.) for light theme
-        # But we want it to look good on dark theme. 
-        # So we can just color it based on intensity ourselves.
-        if count == 0:
-            color = "#161b22" # empty
-        elif count < 3:
-            color = "#0e4429" # low
-        elif count < 6:
-            color = "#006d32" # med
-        elif count < 10:
-            color = "#26a641" # high
-        else:
-            color = "#39d353" # highest
+        # Flatten all days
+        all_days = []
+        for w in recent_weeks:
+            all_days.extend(w['contributionDays'])
             
-        h = min(count * 8, 80) if count > 0 else 4
-        y = 120 - h
+        last_30_days = all_days[-30:]
         
-        # Add tooltip/title for hover
-        graph_svg += f'    <g><title>{count} commits on {day["date"]}</title>\n'
-        graph_svg += f'        <rect x="{x_pos}" y="{y}" width="8" height="{h}" fill="{color}" rx="2"/>\n'
-        graph_svg += f'    </g>\n'
-        x_pos += 12
+        # Generate graph.svg
+        graph_svg = f"""<svg width="400" height="150" xmlns="http://www.w3.org/2000/svg">
+            <style>
+                .title {{ font: bold 16px 'Segoe UI', Arial, sans-serif; fill: #c9d1d9; }}
+            </style>
+            <rect width="400" height="150" rx="12" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+            <text x="20" y="30" class="title">Commit Activity (Last 30 Days)</text>
+        """
         
-    graph_svg += "</svg>"
-    
-    with open("graph.svg", "w", encoding="utf-8") as f:
-        f.write(graph_svg)
-    print("Generated graph.svg successfully!")
+        x_pos = 20
+        for day in last_30_days:
+            count = day['contributionCount']
+            if count == 0:
+                color = "#161b22"
+            elif count < 3:
+                color = "#0e4429"
+            elif count < 6:
+                color = "#006d32"
+            elif count < 10:
+                color = "#26a641"
+            else:
+                color = "#39d353"
+                
+            h = min(count * 8, 80) if count > 0 else 4
+            y = 120 - h
+            
+            graph_svg += f'    <g><title>{count} commits on {day["date"]}</title>\n'
+            graph_svg += f'        <rect x="{x_pos}" y="{y}" width="8" height="{h}" fill="{color}" rx="2"/>\n'
+            graph_svg += f'    </g>\n'
+            x_pos += 12
+            
+        graph_svg += "</svg>"
+        
+        with open("graph.svg", "w", encoding="utf-8") as f:
+            f.write(graph_svg)
+        print("Generated graph.svg successfully!")
 else:
     print(f"GraphQL Error: {graph_resp.text}")
+    with open("graph.svg", "w", encoding="utf-8") as f:
+        f.write('<svg width="400" height="150" xmlns="http://www.w3.org/2000/svg"><text x="20" y="50" fill="red">API Error. Check Action logs.</text></svg>')
