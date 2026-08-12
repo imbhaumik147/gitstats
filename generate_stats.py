@@ -56,9 +56,9 @@ for repo in repos:
     if languages_url:
         lang_resp = requests.get(languages_url, headers=headers)
         if lang_resp.status_code == 200:
-        repo_langs = lang_resp.json()
-        for lang, bytes_count in repo_langs.items():
-            languages[lang] = languages.get(lang, 0) + bytes_count
+            repo_langs = lang_resp.json()
+            for lang, bytes_count in repo_langs.items():
+                languages[lang] = languages.get(lang, 0) + bytes_count
 
 # Calculate language percentages
 total_bytes = sum(languages.values())
