@@ -23,8 +23,8 @@ user = response.json()
 username = user.get("login")
 print(f"Generating stats for {username}...")
 
-# 2. Get your repositories
-repos_response = requests.get(f"https://api.github.com/users/{username}/repos?per_page=100", headers=headers)
+# 2. Get your repositories (including private if token allows)
+repos_response = requests.get("https://api.github.com/user/repos?per_page=100&type=all", headers=headers)
 if repos_response.status_code != 200:
     print(f"Error fetching repos: {repos_response.text}")
     exit(1)
