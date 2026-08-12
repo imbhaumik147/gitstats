@@ -1,5 +1,6 @@
 import os
 import requests
+import datetime
 
 # The token is read from the environment variable GH_TOKEN
 TOKEN = os.environ.get("GH_TOKEN")
@@ -33,7 +34,21 @@ repo_count = len(repos)
 total_stars = sum(repo.get("stargazers_count", 0) for repo in repos)
 total_forks = sum(repo.get("forks_count", 0) for repo in repos)
 
-# 3. Calculate languages
+# 3. Get Advanced Stats (Commits, PRs)
+# Total PRs
+pr_resp = requests.get(f"https://api.github.com/search/issues?q=author:{username}+type:pr", headers=headers)
+total_prs = pr_resp.json().get('total_count', 0) if pr_resp.status_code == 200 else 0
+
+# Total Commits
+commits_resp = requests.get(f"https://api.github.com/search/commits?q=author:{username}", headers=headers)
+total_commits = commits_resp.json().get('total_count', 0) if commits_resp.status_code == 200 else 0
+
+# Last 30 Days Commits
+thirty_days_ago = (datetime.datetime.now() - datetime.timedelta(days=30)).strftime("%Y-%m-%d")
+recent_commits_resp = requests.get(f"https://api.github.com/search/commits?q=author:{username}+committer-date:>{thirty_days_ago}", headers=headers)
+recent_commits = recent_commits_resp.json().get('total_count', 0) if recent_commits_resp.status_code == 200 else 0
+
+# 4. Calculate languages
 languages = {}
 for repo in repos:
     # Get languages for each repository
@@ -46,7 +61,10 @@ for repo in repos:
 
 # Calculate language percentages
 total_bytes = sum(languages.values())
-language_percentages = {lang: (count / total_bytes * 100) for lang, count in languages.items()}
+if total_bytes > 0:
+    language_percentages = {lang: (count / total_bytes * 100) for lang, count in languages.items()}
+else:
+    language_percentages = {}
 # Sort languages by percentage descending
 top_languages = sorted(language_percentages.items(), key=lambda x: x[1], reverse=True)[:5]
 
@@ -54,33 +72,33 @@ print("Top Languages:")
 for lang, pct in top_languages:
     print(f"{lang}: {pct:.1f}%")
 
-# 4. Generate SVG
-# For the SVG, we can create a simple visually appealing card
-# You can customize this layout further!
-svg = f"""<svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
-    <rect width="600" height="300" rx="12" fill="#0d1117"/>
-    <text x="30" y="45" fill="white" font-size="24" font-family="Arial">GitHub Statistics - {username}</text>
+# 5. Generate Stats SVG (Without Languages, With Commits & PRs)
+svg = f"""<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="300" rx="12" fill="#0d1117"/>
+    <text x="30" y="45" fill="white" font-size="22" font-family="Arial, sans-serif" font-weight="bold">GitHub Statistics</text>
     
-    <text x="30" y="90" fill="white" font-size="18" font-family="Arial">Repositories: {repo_count}</text>
-    <text x="30" y="125" fill="white" font-size="18" font-family="Arial">Stars: {total_stars}</text>
-    <text x="30" y="160" fill="white" font-size="18" font-family="Arial">Forks: {total_forks}</text>
-    
-    <text x="300" y="90" fill="white" font-size="18" font-family="Arial">Top Languages:</text>
-"""
+    <text x="30" y="90" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Repositories:</text>
+    <text x="370" y="90" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">{repo_count}</text>
 
-y_pos = 125
-for lang, pct in top_languages:
-    svg += f'    <text x="300" y="{y_pos}" fill="white" font-size="16" font-family="Arial">{lang}: {pct:.1f}%</text>\n'
-    y_pos += 30
+    <text x="30" y="125" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Stars Earned:</text>
+    <text x="370" y="125" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">{total_stars}</text>
 
-svg += "</svg>"
+    <text x="30" y="160" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Total Commits:</text>
+    <text x="370" y="160" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">{total_commits}</text>
+
+    <text x="30" y="195" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Commits (Last 30 Days):</text>
+    <text x="370" y="195" fill="#58a6ff" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">{recent_commits}</text>
+
+    <text x="30" y="230" fill="#c9d1d9" font-size="16" font-family="Arial, sans-serif">Pull Requests:</text>
+    <text x="370" y="230" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold" text-anchor="end">{total_prs}</text>
+</svg>"""
 
 with open("stats.svg", "w", encoding="utf-8") as f:
     f.write(svg)
 
 print("Generated stats.svg successfully!")
 
-# 5. Generate Languages SVG
+# 6. Generate Languages SVG
 lang_svg = f"""<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
     <rect width="400" height="300" rx="12" fill="#0d1117"/>
     <text x="30" y="45" fill="white" font-size="22" font-family="Arial, sans-serif" font-weight="bold">Most Used Languages</text>
@@ -88,18 +106,11 @@ lang_svg = f"""<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
 
 y_pos = 90
 for lang, pct in top_languages:
-    # We can use simple bar widths
     bar_width = int(pct * 2.5) # Scale to fit 250px max width
-    
-    # Language name and percentage
     lang_svg += f'    <text x="30" y="{y_pos}" fill="#c9d1d9" font-size="14" font-family="Arial, sans-serif">{lang}</text>\n'
     lang_svg += f'    <text x="330" y="{y_pos}" fill="#8b949e" font-size="14" font-family="Arial, sans-serif" text-anchor="end">{pct:.1f}%</text>\n'
-    
-    # Progress bar background
     lang_svg += f'    <rect x="30" y="{y_pos + 8}" width="300" height="8" rx="4" fill="#21262d"/>\n'
-    # Progress bar fill (using a default color, ideally you'd map languages to colors)
     lang_svg += f'    <rect x="30" y="{y_pos + 8}" width="{bar_width}" height="8" rx="4" fill="#58a6ff"/>\n'
-    
     y_pos += 45
 
 lang_svg += "</svg>"
