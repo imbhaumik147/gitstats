@@ -41,9 +41,17 @@ total_forks = sum(repo.get("forks_count", 0) for repo in repos)
 pr_resp = requests.get(f"https://api.github.com/search/issues?q=author:{username}+type:pr", headers=headers)
 total_prs = pr_resp.json().get('total_count', 0) if pr_resp.status_code == 200 else 0
 
-# Total Commits
-commits_resp = requests.get(f"https://api.github.com/search/commits?q=author:{username}", headers=headers)
-total_commits = commits_resp.json().get('total_count', 0) if commits_resp.status_code == 200 else 0
+# Total Commits (calculated by checking all repositories to include all branches)
+total_commits = 0
+for repo in repos:
+    contributors_url = repo.get("contributors_url")
+    if contributors_url:
+        cont_resp = requests.get(contributors_url, headers=headers)
+        if cont_resp.status_code == 200:
+            for contributor in cont_resp.json():
+                if contributor.get("login") == username:
+                    total_commits += contributor.get("contributions", 0)
+                    break
 
 # Last 30 Days Commits
 thirty_days_ago = (datetime.datetime.now() - datetime.timedelta(days=30)).strftime("%Y-%m-%d")
