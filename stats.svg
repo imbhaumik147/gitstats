@@ -1,0 +1,13 @@
+<svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+    <rect width="600" height="300" rx="12" fill="#0d1117"/>
+    <text x="30" y="45" fill="white" font-size="24" font-family="Arial">GitHub Statistics - imbhaumik147</text>
+    
+    <text x="30" y="90" fill="white" font-size="18" font-family="Arial">Repositories: 7</text>
+    <text x="30" y="125" fill="white" font-size="18" font-family="Arial">Stars: 14</text>
+    <text x="30" y="160" fill="white" font-size="18" font-family="Arial">Forks: 0</text>
+    
+    <text x="300" y="90" fill="white" font-size="18" font-family="Arial">Top Languages:</text>
+    <text x="300" y="125" fill="white" font-size="16" font-family="Arial">JavaScript: 39.1%</text>
+    <text x="300" y="155" fill="white" font-size="16" font-family="Arial">CSS: 37.6%</text>
+    <text x="300" y="185" fill="white" font-size="16" font-family="Arial">HTML: 23.2%</text>
+</svg>
