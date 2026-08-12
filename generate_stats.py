@@ -52,9 +52,10 @@ recent_commits = recent_commits_resp.json().get('total_count', 0) if recent_comm
 languages = {}
 for repo in repos:
     # Get languages for each repository
-    repo_name = repo.get("name")
-    lang_resp = requests.get(f"https://api.github.com/repos/{username}/{repo_name}/languages", headers=headers)
-    if lang_resp.status_code == 200:
+    languages_url = repo.get("languages_url")
+    if languages_url:
+        lang_resp = requests.get(languages_url, headers=headers)
+        if lang_resp.status_code == 200:
         repo_langs = lang_resp.json()
         for lang, bytes_count in repo_langs.items():
             languages[lang] = languages.get(lang, 0) + bytes_count
