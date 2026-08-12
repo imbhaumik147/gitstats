@@ -31,6 +31,8 @@ if repos_response.status_code != 200:
 
 repos = repos_response.json()
 repo_count = len(repos)
+private_repo_count = sum(1 for r in repos if r.get("private"))
+print(f"Found {repo_count} repositories ({private_repo_count} private). If private is 0, your token lacks permissions!")
 total_stars = sum(repo.get("stargazers_count", 0) for repo in repos)
 total_forks = sum(repo.get("forks_count", 0) for repo in repos)
 
