@@ -146,52 +146,69 @@ if graph_resp.status_code == 200:
             
         last_30_days = all_days[-30:]
         
-        # Generate graph.svg
-        graph_svg = f"""<svg width="400" height="150" xmlns="http://www.w3.org/2000/svg">
+        # Graph dimensions and margins
+        W, H = 800, 300
+        M_LEFT, M_RIGHT, M_TOP, M_BOTTOM = 70, 30, 60, 50
+        GW = W - M_LEFT - M_RIGHT
+        GH = H - M_TOP - M_BOTTOM
+        
+        # Calculate max Y value, rounded up to nearest 5
+        max_count = max([day['contributionCount'] for day in last_30_days] + [1])
+        y_max = max(5, ((max_count + 4) // 5) * 5)
+        
+        graph_svg = f"""<svg width="{W}" height="{H}" xmlns="http://www.w3.org/2000/svg">
             <style>
-                .title {{ font: bold 16px 'Segoe UI', Arial, sans-serif; fill: #c9d1d9; }}
-                .date {{ font: 10px 'Segoe UI', Arial, sans-serif; fill: #8b949e; }}
-                .line {{ fill: none; stroke: #39d353; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }}
-                .area {{ fill: #39d353; opacity: 0.15; }}
+                .bg {{ fill: #0d1117; }}
+                .title {{ font: bold 20px 'Segoe UI', Arial, sans-serif; fill: #38bdf8; }}
+                .axis-label {{ font: bold 12px 'Segoe UI', Arial, sans-serif; fill: #38bdf8; }}
+                .tick-label {{ font: 12px 'Segoe UI', Arial, sans-serif; fill: #c9d1d9; }}
+                .grid {{ stroke: #30363d; stroke-width: 1; stroke-dasharray: 4 4; }}
+                .line {{ fill: none; stroke: #38bdf8; stroke-width: 4; stroke-linejoin: round; }}
+                .dot {{ fill: #ffffff; stroke: #38bdf8; stroke-width: 2; }}
             </style>
-            <rect width="400" height="150" rx="12" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
-            <text x="20" y="30" class="title">Commit Activity (Last 30 Days)</text>
+            <rect width="{W}" height="{H}" rx="12" class="bg" stroke="#30363d" stroke-width="1"/>
+            <text x="{W//2}" y="40" class="title" text-anchor="middle">{name}'s Contribution Graph</text>
+            
+            <!-- Axis Titles -->
+            <text x="25" y="{M_TOP + GH//2}" class="axis-label" text-anchor="middle" transform="rotate(-90 25,{M_TOP + GH//2})">Contributions</text>
+            <text x="{M_LEFT + GW//2}" y="{H - 15}" class="axis-label" text-anchor="middle">Days</text>
         """
         
-        points = []
-        x_pos = 20
-        # Determine max commits to scale the graph heights properly
-        max_count = max([day['contributionCount'] for day in last_30_days] + [1])
+        # Draw horizontal grid lines and Y-axis labels
+        # Steps of 5, or calculate a nice step
+        step = max(1, y_max // 5)
+        if step > 2 and step % 5 != 0: step = ((step + 4) // 5) * 5
         
-        for i, day in enumerate(last_30_days):
-            count = day['contributionCount']
-            # Scale height proportionally, max 70px
-            h = (count / max_count) * 70
-            y = 110 - h
-            points.append(f"{x_pos},{y}")
+        y_ticks = list(range(0, y_max + 1, step))
+        if y_max not in y_ticks: y_ticks.append(y_max)
+        
+        for val in y_ticks:
+            y = M_TOP + GH - (val / y_max) * GH
+            graph_svg += f'    <line x1="{M_LEFT}" y1="{y}" x2="{M_LEFT + GW}" y2="{y}" class="grid"/>\n'
+            graph_svg += f'    <text x="{M_LEFT - 15}" y="{y + 4}" class="tick-label" text-anchor="end">{val}</text>\n'
             
-            # Print dates on X axis roughly every 7 days
-            if i == 0 or i == len(last_30_days) - 1 or i % 7 == 0:
-                # MM-DD format
-                date_short = day['date'][5:] 
-                # Adjust text anchor for first/last elements so they don't overflow
-                anchor = "start" if i == 0 else "end" if i == len(last_30_days)-1 else "middle"
-                graph_svg += f'    <text x="{x_pos}" y="135" class="date" text-anchor="{anchor}">{date_short}</text>\n'
-                
-            x_pos += 12
+        # Vertical grid lines, X-axis labels, and points
+        points = []
+        for i, day in enumerate(last_30_days):
+            x = M_LEFT + (i / 29) * GW
+            count = day['contributionCount']
+            y = M_TOP + GH - (count / y_max) * GH
+            points.append(f"{x},{y}")
+            
+            # X-axis tick
+            day_num = int(day['date'][-2:])
+            graph_svg += f'    <line x1="{x}" y1="{M_TOP}" x2="{x}" y2="{M_TOP + GH}" class="grid"/>\n'
+            graph_svg += f'    <text x="{x}" y="{M_TOP + GH + 20}" class="tick-label" text-anchor="middle">{day_num}</text>\n'
             
         path_d = "M " + " L ".join(points)
-        area_d = f"M {points[0].split(',')[0]},110 L " + " L ".join(points) + f" L {points[-1].split(',')[0]},110 Z"
-        
-        graph_svg += f'    <path d="{area_d}" class="area" />\n'
         graph_svg += f'    <path d="{path_d}" class="line" />\n'
         
-        # Add interactive points for hover tooltips
+        # Draw interactive dots
         for p, day in zip(points, last_30_days):
             px, py = p.split(',')
             count = day['contributionCount']
             graph_svg += f'    <g><title>{count} commits on {day["date"]}</title>\n'
-            graph_svg += f'        <circle cx="{px}" cy="{py}" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>\n'
+            graph_svg += f'        <circle cx="{px}" cy="{py}" r="4" class="dot"/>\n'
             graph_svg += f'    </g>\n'
             
         graph_svg += "</svg>"
