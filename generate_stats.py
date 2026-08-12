@@ -150,32 +150,49 @@ if graph_resp.status_code == 200:
         graph_svg = f"""<svg width="400" height="150" xmlns="http://www.w3.org/2000/svg">
             <style>
                 .title {{ font: bold 16px 'Segoe UI', Arial, sans-serif; fill: #c9d1d9; }}
+                .date {{ font: 10px 'Segoe UI', Arial, sans-serif; fill: #8b949e; }}
+                .line {{ fill: none; stroke: #39d353; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }}
+                .area {{ fill: #39d353; opacity: 0.15; }}
             </style>
             <rect width="400" height="150" rx="12" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
             <text x="20" y="30" class="title">Commit Activity (Last 30 Days)</text>
         """
         
+        points = []
         x_pos = 20
-        for day in last_30_days:
+        # Determine max commits to scale the graph heights properly
+        max_count = max([day['contributionCount'] for day in last_30_days] + [1])
+        
+        for i, day in enumerate(last_30_days):
             count = day['contributionCount']
-            if count == 0:
-                color = "#161b22"
-            elif count < 3:
-                color = "#0e4429"
-            elif count < 6:
-                color = "#006d32"
-            elif count < 10:
-                color = "#26a641"
-            else:
-                color = "#39d353"
-                
-            h = min(count * 8, 80) if count > 0 else 4
-            y = 120 - h
+            # Scale height proportionally, max 70px
+            h = (count / max_count) * 70
+            y = 110 - h
+            points.append(f"{x_pos},{y}")
             
-            graph_svg += f'    <g><title>{count} commits on {day["date"]}</title>\n'
-            graph_svg += f'        <rect x="{x_pos}" y="{y}" width="8" height="{h}" fill="{color}" rx="2"/>\n'
-            graph_svg += f'    </g>\n'
+            # Print dates on X axis roughly every 7 days
+            if i == 0 or i == len(last_30_days) - 1 or i % 7 == 0:
+                # MM-DD format
+                date_short = day['date'][5:] 
+                # Adjust text anchor for first/last elements so they don't overflow
+                anchor = "start" if i == 0 else "end" if i == len(last_30_days)-1 else "middle"
+                graph_svg += f'    <text x="{x_pos}" y="135" class="date" text-anchor="{anchor}">{date_short}</text>\n'
+                
             x_pos += 12
+            
+        path_d = "M " + " L ".join(points)
+        area_d = f"M {points[0].split(',')[0]},110 L " + " L ".join(points) + f" L {points[-1].split(',')[0]},110 Z"
+        
+        graph_svg += f'    <path d="{area_d}" class="area" />\n'
+        graph_svg += f'    <path d="{path_d}" class="line" />\n'
+        
+        # Add interactive points for hover tooltips
+        for p, day in zip(points, last_30_days):
+            px, py = p.split(',')
+            count = day['contributionCount']
+            graph_svg += f'    <g><title>{count} commits on {day["date"]}</title>\n'
+            graph_svg += f'        <circle cx="{px}" cy="{py}" r="3" fill="#0d1117" stroke="#39d353" stroke-width="1.5"/>\n'
+            graph_svg += f'    </g>\n'
             
         graph_svg += "</svg>"
         
