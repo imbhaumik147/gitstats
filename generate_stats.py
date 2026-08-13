@@ -89,9 +89,9 @@ for i, (lang, pct) in enumerate(top_languages):
     bar_width = int(pct * 3) # max 300px
     color = colors[i % len(colors)]
     svg += f'    <text x="40" y="{y_pos}" class="lang-text">{lang}</text>\n'
-    svg += f'    <text x="490" y="{y_pos}" class="lang-pct">{pct:.1f}%</text>\n'
     svg += f'    <rect x="170" y="{y_pos - 10}" width="300" height="10" rx="5" fill="#21262d"/>\n'
     svg += f'    <rect x="170" y="{y_pos - 10}" width="{bar_width}" height="10" rx="5" fill="{color}"/>\n'
+    svg += f'    <text x="540" y="{y_pos}" class="lang-pct">{pct:.1f}%</text>\n'
     y_pos += 30
 
 svg += f"""
