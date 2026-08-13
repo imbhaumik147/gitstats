@@ -16,16 +16,16 @@
             <text x="420" y="285" class="axis-label" text-anchor="middle">Days</text>
             <line x1="70" y1="250.0" x2="770" y2="250.0" class="grid"/>
     <text x="55" y="254.0" class="tick-label" text-anchor="end">0</text>
-    <line x1="70" y1="207.77777777777777" x2="770" y2="207.77777777777777" class="grid"/>
-    <text x="55" y="211.77777777777777" class="tick-label" text-anchor="end">10</text>
-    <line x1="70" y1="165.55555555555554" x2="770" y2="165.55555555555554" class="grid"/>
-    <text x="55" y="169.55555555555554" class="tick-label" text-anchor="end">20</text>
-    <line x1="70" y1="123.33333333333334" x2="770" y2="123.33333333333334" class="grid"/>
-    <text x="55" y="127.33333333333334" class="tick-label" text-anchor="end">30</text>
-    <line x1="70" y1="81.11111111111111" x2="770" y2="81.11111111111111" class="grid"/>
-    <text x="55" y="85.11111111111111" class="tick-label" text-anchor="end">40</text>
+    <line x1="70" y1="212.0" x2="770" y2="212.0" class="grid"/>
+    <text x="55" y="216.0" class="tick-label" text-anchor="end">5</text>
+    <line x1="70" y1="174.0" x2="770" y2="174.0" class="grid"/>
+    <text x="55" y="178.0" class="tick-label" text-anchor="end">10</text>
+    <line x1="70" y1="136.0" x2="770" y2="136.0" class="grid"/>
+    <text x="55" y="140.0" class="tick-label" text-anchor="end">15</text>
+    <line x1="70" y1="98.0" x2="770" y2="98.0" class="grid"/>
+    <text x="55" y="102.0" class="tick-label" text-anchor="end">20</text>
     <line x1="70" y1="60.0" x2="770" y2="60.0" class="grid"/>
-    <text x="55" y="64.0" class="tick-label" text-anchor="end">45</text>
+    <text x="55" y="64.0" class="tick-label" text-anchor="end">25</text>
     <line x1="70.0" y1="60" x2="70.0" y2="250" class="grid"/>
     <text x="70.0" y="270" class="tick-label" text-anchor="middle">15</text>
     <line x1="94.13793103448276" y1="60" x2="94.13793103448276" y2="250" class="grid"/>
@@ -86,15 +86,15 @@
     <text x="745.8620689655173" y="270" class="tick-label" text-anchor="middle">12</text>
     <line x1="770.0" y1="60" x2="770.0" y2="250" class="grid"/>
     <text x="770.0" y="270" class="tick-label" text-anchor="middle">13</text>
-    <path d="M 70.0,245.77777777777777 L 94.13793103448276,224.66666666666666 L 118.27586206896552,228.88888888888889 L 142.41379310344826,250.0 L 166.55172413793105,250.0 L 190.6896551724138,237.33333333333334 L 214.82758620689654,220.44444444444446 L 238.96551724137933,237.33333333333334 L 263.1034482758621,241.55555555555554 L 287.2413793103448,228.88888888888889 L 311.3793103448276,245.77777777777777 L 335.51724137931035,250.0 L 359.6551724137931,233.11111111111111 L 383.7931034482759,237.33333333333334 L 407.93103448275866,216.22222222222223 L 432.0689655172414,190.88888888888889 L 456.2068965517241,224.66666666666666 L 480.34482758620686,228.88888888888889 L 504.48275862068965,250.0 L 528.6206896551723,207.77777777777777 L 552.7586206896552,241.55555555555554 L 576.8965517241379,241.55555555555554 L 601.0344827586207,245.77777777777777 L 625.1724137931035,245.77777777777777 L 649.3103448275862,250.0 L 673.448275862069,250.0 L 697.5862068965517,216.22222222222223 L 721.7241379310344,169.77777777777777 L 745.8620689655173,64.22222222222223 L 770.0,169.77777777777777" class="line" />
-    <g><title>1 commits on 2026-07-15</title>
-        <circle cx="70.0" cy="245.77777777777777" r="4" class="dot"/>
+    <path d="M 70.0,250.0 L 94.13793103448276,250.0 L 118.27586206896552,250.0 L 142.41379310344826,250.0 L 166.55172413793105,250.0 L 190.6896551724138,250.0 L 214.82758620689654,250.0 L 238.96551724137933,250.0 L 263.1034482758621,250.0 L 287.2413793103448,250.0 L 311.3793103448276,250.0 L 335.51724137931035,250.0 L 359.6551724137931,250.0 L 383.7931034482759,250.0 L 407.93103448275866,219.6 L 432.0689655172414,250.0 L 456.2068965517241,250.0 L 480.34482758620686,250.0 L 504.48275862068965,250.0 L 528.6206896551723,212.0 L 552.7586206896552,250.0 L 576.8965517241379,250.0 L 601.0344827586207,250.0 L 625.1724137931035,250.0 L 649.3103448275862,250.0 L 673.448275862069,250.0 L 697.5862068965517,250.0 L 721.7241379310344,242.4 L 745.8620689655173,75.19999999999999 L 770.0,234.8" class="line" />
+    <g><title>0 commits on 2026-07-15</title>
+        <circle cx="70.0" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>6 commits on 2026-07-16</title>
-        <circle cx="94.13793103448276" cy="224.66666666666666" r="4" class="dot"/>
+    <g><title>0 commits on 2026-07-16</title>
+        <circle cx="94.13793103448276" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>5 commits on 2026-07-17</title>
-        <circle cx="118.27586206896552" cy="228.88888888888889" r="4" class="dot"/>
+    <g><title>0 commits on 2026-07-17</title>
+        <circle cx="118.27586206896552" cy="250.0" r="4" class="dot"/>
     </g>
     <g><title>0 commits on 2026-07-18</title>
         <circle cx="142.41379310344826" cy="250.0" r="4" class="dot"/>
@@ -102,62 +102,62 @@
     <g><title>0 commits on 2026-07-19</title>
         <circle cx="166.55172413793105" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>3 commits on 2026-07-20</title>
-        <circle cx="190.6896551724138" cy="237.33333333333334" r="4" class="dot"/>
+    <g><title>0 commits on 2026-07-20</title>
+        <circle cx="190.6896551724138" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>7 commits on 2026-07-21</title>
-        <circle cx="214.82758620689654" cy="220.44444444444446" r="4" class="dot"/>
+    <g><title>0 commits on 2026-07-21</title>
+        <circle cx="214.82758620689654" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>3 commits on 2026-07-22</title>
-        <circle cx="238.96551724137933" cy="237.33333333333334" r="4" class="dot"/>
+    <g><title>0 commits on 2026-07-22</title>
+        <circle cx="238.96551724137933" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>2 commits on 2026-07-23</title>
-        <circle cx="263.1034482758621" cy="241.55555555555554" r="4" class="dot"/>
+    <g><title>0 commits on 2026-07-23</title>
+        <circle cx="263.1034482758621" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>5 commits on 2026-07-24</title>
-        <circle cx="287.2413793103448" cy="228.88888888888889" r="4" class="dot"/>
+    <g><title>0 commits on 2026-07-24</title>
+        <circle cx="287.2413793103448" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>1 commits on 2026-07-25</title>
-        <circle cx="311.3793103448276" cy="245.77777777777777" r="4" class="dot"/>
+    <g><title>0 commits on 2026-07-25</title>
+        <circle cx="311.3793103448276" cy="250.0" r="4" class="dot"/>
     </g>
     <g><title>0 commits on 2026-07-26</title>
         <circle cx="335.51724137931035" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>4 commits on 2026-07-27</title>
-        <circle cx="359.6551724137931" cy="233.11111111111111" r="4" class="dot"/>
+    <g><title>0 commits on 2026-07-27</title>
+        <circle cx="359.6551724137931" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>3 commits on 2026-07-28</title>
-        <circle cx="383.7931034482759" cy="237.33333333333334" r="4" class="dot"/>
+    <g><title>0 commits on 2026-07-28</title>
+        <circle cx="383.7931034482759" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>8 commits on 2026-07-29</title>
-        <circle cx="407.93103448275866" cy="216.22222222222223" r="4" class="dot"/>
+    <g><title>4 commits on 2026-07-29</title>
+        <circle cx="407.93103448275866" cy="219.6" r="4" class="dot"/>
     </g>
-    <g><title>14 commits on 2026-07-30</title>
-        <circle cx="432.0689655172414" cy="190.88888888888889" r="4" class="dot"/>
+    <g><title>0 commits on 2026-07-30</title>
+        <circle cx="432.0689655172414" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>6 commits on 2026-07-31</title>
-        <circle cx="456.2068965517241" cy="224.66666666666666" r="4" class="dot"/>
+    <g><title>0 commits on 2026-07-31</title>
+        <circle cx="456.2068965517241" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>5 commits on 2026-08-01</title>
-        <circle cx="480.34482758620686" cy="228.88888888888889" r="4" class="dot"/>
+    <g><title>0 commits on 2026-08-01</title>
+        <circle cx="480.34482758620686" cy="250.0" r="4" class="dot"/>
     </g>
     <g><title>0 commits on 2026-08-02</title>
         <circle cx="504.48275862068965" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>10 commits on 2026-08-03</title>
-        <circle cx="528.6206896551723" cy="207.77777777777777" r="4" class="dot"/>
+    <g><title>5 commits on 2026-08-03</title>
+        <circle cx="528.6206896551723" cy="212.0" r="4" class="dot"/>
     </g>
-    <g><title>2 commits on 2026-08-04</title>
-        <circle cx="552.7586206896552" cy="241.55555555555554" r="4" class="dot"/>
+    <g><title>0 commits on 2026-08-04</title>
+        <circle cx="552.7586206896552" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>2 commits on 2026-08-05</title>
-        <circle cx="576.8965517241379" cy="241.55555555555554" r="4" class="dot"/>
+    <g><title>0 commits on 2026-08-05</title>
+        <circle cx="576.8965517241379" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>1 commits on 2026-08-06</title>
-        <circle cx="601.0344827586207" cy="245.77777777777777" r="4" class="dot"/>
+    <g><title>0 commits on 2026-08-06</title>
+        <circle cx="601.0344827586207" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>1 commits on 2026-08-07</title>
-        <circle cx="625.1724137931035" cy="245.77777777777777" r="4" class="dot"/>
+    <g><title>0 commits on 2026-08-07</title>
+        <circle cx="625.1724137931035" cy="250.0" r="4" class="dot"/>
     </g>
     <g><title>0 commits on 2026-08-08</title>
         <circle cx="649.3103448275862" cy="250.0" r="4" class="dot"/>
@@ -165,16 +165,16 @@
     <g><title>0 commits on 2026-08-09</title>
         <circle cx="673.448275862069" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>8 commits on 2026-08-10</title>
-        <circle cx="697.5862068965517" cy="216.22222222222223" r="4" class="dot"/>
+    <g><title>0 commits on 2026-08-10</title>
+        <circle cx="697.5862068965517" cy="250.0" r="4" class="dot"/>
     </g>
-    <g><title>19 commits on 2026-08-11</title>
-        <circle cx="721.7241379310344" cy="169.77777777777777" r="4" class="dot"/>
+    <g><title>1 commits on 2026-08-11</title>
+        <circle cx="721.7241379310344" cy="242.4" r="4" class="dot"/>
     </g>
-    <g><title>44 commits on 2026-08-12</title>
-        <circle cx="745.8620689655173" cy="64.22222222222223" r="4" class="dot"/>
+    <g><title>23 commits on 2026-08-12</title>
+        <circle cx="745.8620689655173" cy="75.19999999999999" r="4" class="dot"/>
     </g>
-    <g><title>19 commits on 2026-08-13</title>
-        <circle cx="770.0" cy="169.77777777777777" r="4" class="dot"/>
+    <g><title>2 commits on 2026-08-13</title>
+        <circle cx="770.0" cy="234.8" r="4" class="dot"/>
     </g>
 </svg>
