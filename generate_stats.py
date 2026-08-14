@@ -103,120 +103,118 @@ with open("stats.svg", "w", encoding="utf-8") as f:
 print("Generated stats.svg successfully!")
 
 
-# 6. Fetch Contribution Graph Data via GraphQL
-graphql_query = """
-query($userName:String!) {
-  user(login: $userName){
-    contributionsCollection {
-      contributionCalendar {
-        weeks {
-          contributionDays {
-            contributionCount
-            date
-            color
-          }
-        }
-      }
-    }
-  }
-}
-"""
-graph_resp = requests.post(
-    'https://api.github.com/graphql', 
-    json={'query': graphql_query, 'variables': {'userName': username}}, 
-    headers=headers
-)
+# 6. Fetch Commit Graph Data (All Branches) via Search API
+import datetime
 
-if graph_resp.status_code == 200:
-    data = graph_resp.json()
-    if 'errors' in data or 'data' not in data:
-        print(f"GraphQL Error: {data}")
-        # Create a fallback graph.svg with the error
-        with open("graph.svg", "w", encoding="utf-8") as f:
-            f.write('<svg width="400" height="150" xmlns="http://www.w3.org/2000/svg"><text x="20" y="50" fill="red">GraphQL Error. Check Action logs.</text></svg>')
+# Generate last 30 days list
+today = datetime.datetime.now()
+last_30_days_dates = [(today - datetime.timedelta(days=i)).strftime("%Y-%m-%d") for i in range(29, -1, -1)]
+commits_per_day = {d: 0 for d in last_30_days_dates}
+
+page = 1
+while True:
+    search_url = f"https://api.github.com/search/commits?q=author:{username}+committer-date:>{thirty_days_ago}&per_page=100&page={page}"
+    search_resp = requests.get(search_url, headers=headers)
+    if search_resp.status_code == 200:
+        data = search_resp.json()
+        items = data.get('items', [])
+        if not items:
+            break
+        for item in items:
+            commit_date_time = item.get('commit', {}).get('committer', {}).get('date', '')
+            if commit_date_time:
+                try:
+                    dt = datetime.datetime.strptime(commit_date_time, "%Y-%m-%dT%H:%M:%S%z")
+                except ValueError:
+                    try:
+                        dt = datetime.datetime.strptime(commit_date_time.replace("Z", "+0000"), "%Y-%m-%dT%H:%M:%S%z")
+                    except ValueError:
+                        dt = None
+                
+                if dt:
+                    # Convert to local time
+                    local_dt = dt.astimezone()
+                    date_str = local_dt.strftime("%Y-%m-%d")
+                    
+                    if date_str in commits_per_day:
+                        commits_per_day[date_str] += 1
+        
+        if len(items) < 100 or page >= 10: # limit to 10 pages to avoid rate limits
+            break
+        page += 1
     else:
-        weeks = data['data']['user']['contributionsCollection']['contributionCalendar']['weeks']
-        # Get last 5 weeks to cover ~30 days
-        recent_weeks = weeks[-5:]
-        
-        # Flatten all days
-        all_days = []
-        for w in recent_weeks:
-            all_days.extend(w['contributionDays'])
-            
-        last_30_days = all_days[-30:]
-        
-        # Graph dimensions and margins
-        W, H = 800, 300
-        M_LEFT, M_RIGHT, M_TOP, M_BOTTOM = 70, 30, 60, 50
-        GW = W - M_LEFT - M_RIGHT
-        GH = H - M_TOP - M_BOTTOM
-        
-        # Calculate max Y value, rounded up to nearest 5
-        max_count = max([day['contributionCount'] for day in last_30_days] + [1])
-        y_max = max(5, ((max_count + 4) // 5) * 5)
-        
-        graph_svg = f"""<svg width="100%" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg">
-            <style>
-                .bg {{ fill: #0d1117; }}
-                .title {{ font: bold 20px 'Segoe UI', Arial, sans-serif; fill: #38bdf8; }}
-                .axis-label {{ font: bold 12px 'Segoe UI', Arial, sans-serif; fill: #38bdf8; }}
-                .tick-label {{ font: 12px 'Segoe UI', Arial, sans-serif; fill: #c9d1d9; }}
-                .grid {{ stroke: #30363d; stroke-width: 1; stroke-dasharray: 4 4; }}
-                .line {{ fill: none; stroke: #38bdf8; stroke-width: 4; stroke-linejoin: round; }}
-                .dot {{ fill: #ffffff; stroke: #38bdf8; stroke-width: 2; }}
-            </style>
-            <rect width="{W}" height="{H}" rx="12" class="bg" stroke="#30363d" stroke-width="1"/>
-            <text x="{W//2}" y="40" class="title" text-anchor="middle">{name}'s Contribution Graph</text>
-            
-            <!-- Axis Titles -->
-            <text x="25" y="{M_TOP + GH//2}" class="axis-label" text-anchor="middle" transform="rotate(-90 25,{M_TOP + GH//2})">Contributions</text>
-            <text x="{M_LEFT + GW//2}" y="{H - 15}" class="axis-label" text-anchor="middle">Days</text>
-        """
-        
-        # Draw horizontal grid lines and Y-axis labels
-        # Steps of 5, or calculate a nice step
-        step = max(1, y_max // 5)
-        if step > 2 and step % 5 != 0: step = ((step + 4) // 5) * 5
-        
-        y_ticks = list(range(0, y_max + 1, step))
-        if y_max not in y_ticks: y_ticks.append(y_max)
-        
-        for val in y_ticks:
-            y = M_TOP + GH - (val / y_max) * GH
-            graph_svg += f'    <line x1="{M_LEFT}" y1="{y}" x2="{M_LEFT + GW}" y2="{y}" class="grid"/>\n'
-            graph_svg += f'    <text x="{M_LEFT - 15}" y="{y + 4}" class="tick-label" text-anchor="end">{val}</text>\n'
-            
-        # Vertical grid lines, X-axis labels, and points
-        points = []
-        for i, day in enumerate(last_30_days):
-            x = M_LEFT + (i / 29) * GW
-            count = day['contributionCount']
-            y = M_TOP + GH - (count / y_max) * GH
-            points.append(f"{x},{y}")
-            
-            # X-axis tick
-            day_num = int(day['date'][-2:])
-            graph_svg += f'    <line x1="{x}" y1="{M_TOP}" x2="{x}" y2="{M_TOP + GH}" class="grid"/>\n'
-            graph_svg += f'    <text x="{x}" y="{M_TOP + GH + 20}" class="tick-label" text-anchor="middle">{day_num}</text>\n'
-            
-        path_d = "M " + " L ".join(points)
-        graph_svg += f'    <path d="{path_d}" class="line" />\n'
-        
-        # Draw interactive dots
-        for p, day in zip(points, last_30_days):
-            px, py = p.split(',')
-            count = day['contributionCount']
-            graph_svg += f'    <g><title>{count} commits on {day["date"]}</title>\n'
-            graph_svg += f'        <circle cx="{px}" cy="{py}" r="4" class="dot"/>\n'
-            graph_svg += f'    </g>\n'
-            
-        graph_svg += "</svg>"
-        
-        with open("graph.svg", "w", encoding="utf-8") as f:
-            f.write(graph_svg)
-        print("Generated graph.svg successfully!")
-else:
-    print(f"GraphQL Error: {graph_resp.text}")
-    with open("graph.svg", "w", encoding="utf-8") as f:
-        f.write('<svg width="400" height="150" xmlns="http://www.w3.org/2000/svg"><text x="20" y="50" fill="red">API Error. Check Action logs.</text></svg>')
+        print(f"Search API Error: {search_resp.text}")
+        break
+
+# Create last_30_days list with structure similar to old data
+last_30_days = [{'date': d, 'contributionCount': commits_per_day[d]} for d in last_30_days_dates]
+
+# Graph dimensions and margins
+W, H = 800, 300
+M_LEFT, M_RIGHT, M_TOP, M_BOTTOM = 70, 30, 60, 50
+GW = W - M_LEFT - M_RIGHT
+GH = H - M_TOP - M_BOTTOM
+
+# Calculate max Y value, rounded up to nearest 5
+max_count = max([day['contributionCount'] for day in last_30_days] + [1])
+y_max = max(5, ((max_count + 4) // 5) * 5)
+
+graph_svg = f"""<svg width="100%" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        .bg {{ fill: #0d1117; }}
+        .title {{ font: bold 20px 'Segoe UI', Arial, sans-serif; fill: #38bdf8; }}
+        .axis-label {{ font: bold 12px 'Segoe UI', Arial, sans-serif; fill: #38bdf8; }}
+        .tick-label {{ font: 12px 'Segoe UI', Arial, sans-serif; fill: #c9d1d9; }}
+        .grid {{ stroke: #30363d; stroke-width: 1; stroke-dasharray: 4 4; }}
+        .line {{ fill: none; stroke: #38bdf8; stroke-width: 4; stroke-linejoin: round; }}
+        .dot {{ fill: #ffffff; stroke: #38bdf8; stroke-width: 2; }}
+    </style>
+    <rect width="{W}" height="{H}" rx="12" class="bg" stroke="#30363d" stroke-width="1"/>
+    <text x="{W//2}" y="40" class="title" text-anchor="middle">{name}'s Commit Graph (All Branches)</text>
+    
+    <!-- Axis Titles -->
+    <text x="25" y="{M_TOP + GH//2}" class="axis-label" text-anchor="middle" transform="rotate(-90 25,{M_TOP + GH//2})">Commits</text>
+    <text x="{M_LEFT + GW//2}" y="{H - 15}" class="axis-label" text-anchor="middle">Days</text>
+"""
+
+# Draw horizontal grid lines and Y-axis labels
+step = max(1, y_max // 5)
+if step > 2 and step % 5 != 0: step = ((step + 4) // 5) * 5
+
+y_ticks = list(range(0, y_max + 1, step))
+if y_max not in y_ticks: y_ticks.append(y_max)
+
+for val in y_ticks:
+    y = M_TOP + GH - (val / y_max) * GH
+    graph_svg += f'    <line x1="{M_LEFT}" y1="{y}" x2="{M_LEFT + GW}" y2="{y}" class="grid"/>\\n'
+    graph_svg += f'    <text x="{M_LEFT - 15}" y="{y + 4}" class="tick-label" text-anchor="end">{val}</text>\\n'
+    
+# Vertical grid lines, X-axis labels, and points
+points = []
+for i, day in enumerate(last_30_days):
+    x = M_LEFT + (i / 29) * GW
+    count = day['contributionCount']
+    y = M_TOP + GH - (count / y_max) * GH
+    points.append(f"{x},{y}")
+    
+    # X-axis tick
+    day_num = int(day['date'][-2:])
+    graph_svg += f'    <line x1="{x}" y1="{M_TOP}" x2="{x}" y2="{M_TOP + GH}" class="grid"/>\\n'
+    graph_svg += f'    <text x="{x}" y="{M_TOP + GH + 20}" class="tick-label" text-anchor="middle">{day_num}</text>\\n'
+    
+path_d = "M " + " L ".join(points)
+graph_svg += f'    <path d="{path_d}" class="line" />\\n'
+
+# Draw interactive dots
+for p, day in zip(points, last_30_days):
+    px, py = p.split(',')
+    count = day['contributionCount']
+    graph_svg += f'    <g><title>{count} commits on {day["date"]}</title>\\n'
+    graph_svg += f'        <circle cx="{px}" cy="{py}" r="4" class="dot"/>\\n'
+    graph_svg += f'    </g>\\n'
+    
+graph_svg += "</svg>"
+
+with open("graph.svg", "w", encoding="utf-8") as f:
+    f.write(graph_svg)
+print("Generated graph.svg successfully!")
