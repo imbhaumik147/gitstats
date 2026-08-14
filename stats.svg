@@ -25,23 +25,23 @@
     <text x="300" y="175" class="box-text" text-anchor="middle">STARS</text>
     
     <rect x="400" y="110" width="160" height="80" class="box" />
-    <text x="480" y="150" class="box-num" text-anchor="middle">183</text>
+    <text x="480" y="150" class="box-num" text-anchor="middle">164</text>
     <text x="480" y="175" class="box-text" text-anchor="middle">COMMITS (30D)</text>
     
     <!-- Languages -->
     <text x="40" y="240" class="title">TOP LANGUAGES</text>
     <text x="40" y="270" class="lang-text">PHP</text>
     <rect x="170" y="260" width="300" height="10" rx="5" fill="#21262d"/>
-    <rect x="170" y="260" width="211" height="10" rx="5" fill="#f1e05a"/>
-    <text x="540" y="270" class="lang-pct">70.6%</text>
+    <rect x="170" y="260" width="220" height="10" rx="5" fill="#f1e05a"/>
+    <text x="540" y="270" class="lang-pct">73.4%</text>
     <text x="40" y="300" class="lang-text">HTML</text>
     <rect x="170" y="290" width="300" height="10" rx="5" fill="#21262d"/>
-    <rect x="170" y="290" width="45" height="10" rx="5" fill="#4F5D95"/>
-    <text x="540" y="300" class="lang-pct">15.2%</text>
+    <rect x="170" y="290" width="41" height="10" rx="5" fill="#4F5D95"/>
+    <text x="540" y="300" class="lang-pct">13.8%</text>
     <text x="40" y="330" class="lang-text">Python</text>
     <rect x="170" y="320" width="300" height="10" rx="5" fill="#21262d"/>
-    <rect x="170" y="320" width="29" height="10" rx="5" fill="#00B4AB"/>
-    <text x="540" y="330" class="lang-pct">9.8%</text>
+    <rect x="170" y="320" width="25" height="10" rx="5" fill="#00B4AB"/>
+    <text x="540" y="330" class="lang-pct">8.6%</text>
     <text x="40" y="360" class="lang-text">CSS</text>
     <rect x="170" y="350" width="300" height="10" rx="5" fill="#21262d"/>
     <rect x="170" y="350" width="7" height="10" rx="5" fill="#e34c26"/>
