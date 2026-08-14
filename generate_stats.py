@@ -123,13 +123,14 @@ while True:
         for item in items:
             commit_date_time = item.get('commit', {}).get('committer', {}).get('date', '')
             if commit_date_time:
+                date_part = commit_date_time.split('T')[0]
                 try:
-                    dt = datetime.datetime.strptime(commit_date_time, "%Y-%m-%dT%H:%M:%S%z")
-                except ValueError:
-                    try:
-                        dt = datetime.datetime.strptime(commit_date_time.replace("Z", "+0000"), "%Y-%m-%dT%H:%M:%S%z")
-                    except ValueError:
-                        dt = None
+                    time_part = commit_date_time.split('T')[1].replace('Z', '')
+                    time_part = time_part.split('+')[0].split('-')[0].split('.')[0]
+                    dt_str = f"{date_part}T{time_part}+0000"
+                    dt = datetime.datetime.strptime(dt_str, "%Y-%m-%dT%H:%M:%S%z")
+                except Exception:
+                    dt = None
                 
                 if dt:
                     # Convert to local time
@@ -138,6 +139,7 @@ while True:
                     
                     if date_str in commits_per_day:
                         commits_per_day[date_str] += 1
+
         
         if len(items) < 100 or page >= 10: # limit to 10 pages to avoid rate limits
             break
