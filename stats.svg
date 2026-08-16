@@ -25,7 +25,7 @@
     <text x="300" y="175" class="box-text" text-anchor="middle">STARS</text>
     
     <rect x="400" y="110" width="160" height="80" class="box" />
-    <text x="480" y="150" class="box-num" text-anchor="middle">160</text>
+    <text x="480" y="150" class="box-num" text-anchor="middle">155</text>
     <text x="480" y="175" class="box-text" text-anchor="middle">COMMITS (30D)</text>
     
     <!-- Languages -->
@@ -47,5 +47,5 @@
     <rect x="170" y="350" width="7" height="10" rx="5" fill="#e34c26"/>
     <text x="540" y="360" class="lang-pct">2.4%</text>
 
-    <text x="40" y="400" class="footer">Updated: 15 Aug 2026</text>
+    <text x="40" y="400" class="footer">Updated: 16 Aug 2026</text>
 </svg>
