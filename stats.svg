@@ -21,7 +21,7 @@
     <text x="120" y="175" class="box-text" text-anchor="middle">REPOS</text>
     
     <rect x="220" y="110" width="160" height="80" class="box" />
-    <text x="300" y="150" class="box-num" text-anchor="middle">22</text>
+    <text x="300" y="150" class="box-num" text-anchor="middle">28</text>
     <text x="300" y="175" class="box-text" text-anchor="middle">STARS</text>
     
     <rect x="400" y="110" width="160" height="80" class="box" />
