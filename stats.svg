@@ -33,15 +33,15 @@
     <text x="40" y="270" class="lang-text">PHP</text>
     <rect x="170" y="260" width="300" height="10" rx="5" fill="#21262d"/>
     <rect x="170" y="260" width="216" height="10" rx="5" fill="#f1e05a"/>
-    <text x="540" y="270" class="lang-pct">72.3%</text>
+    <text x="540" y="270" class="lang-pct">72.2%</text>
     <text x="40" y="300" class="lang-text">HTML</text>
     <rect x="170" y="290" width="300" height="10" rx="5" fill="#21262d"/>
-    <rect x="170" y="290" width="38" height="10" rx="5" fill="#4F5D95"/>
+    <rect x="170" y="290" width="37" height="10" rx="5" fill="#4F5D95"/>
     <text x="540" y="300" class="lang-pct">12.7%</text>
     <text x="40" y="330" class="lang-text">Python</text>
     <rect x="170" y="320" width="300" height="10" rx="5" fill="#21262d"/>
-    <rect x="170" y="320" width="23" height="10" rx="5" fill="#00B4AB"/>
-    <text x="540" y="330" class="lang-pct">8.0%</text>
+    <rect x="170" y="320" width="24" height="10" rx="5" fill="#00B4AB"/>
+    <text x="540" y="330" class="lang-pct">8.1%</text>
     <text x="40" y="360" class="lang-text">CSS</text>
     <rect x="170" y="350" width="300" height="10" rx="5" fill="#21262d"/>
     <rect x="170" y="350" width="15" height="10" rx="5" fill="#e34c26"/>
