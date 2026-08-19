@@ -21,19 +21,45 @@ user = response.json()
 username = user.get("login")
 name = user.get("name") or username
 
-# 2. Get repositories
-repos_response = requests.get("https://api.github.com/user/repos?per_page=100&type=all", headers=headers)
-repos = repos_response.json() if repos_response.status_code == 200 else []
+# Collect user emails for commit matching
+user_emails = set()
+if user.get("email"):
+    user_emails.add(user["email"].lower())
+user_emails.add(f"{username}@users.noreply.github.com".lower())
+if user.get("id"):
+    user_emails.add(f"{user['id']}+{username}@users.noreply.github.com".lower())
+
+try:
+    emails_resp = requests.get("https://api.github.com/user/emails", headers=headers)
+    if emails_resp.status_code == 200:
+        for e in emails_resp.json():
+            if isinstance(e, dict) and e.get("email"):
+                user_emails.add(e["email"].lower())
+except Exception as e:
+    print(f"Note: Could not fetch user/emails ({e})")
+
+# 2. Get all repositories (paginated)
+repos = []
+page = 1
+while True:
+    repos_response = requests.get(
+        f"https://api.github.com/user/repos?per_page=100&page={page}&affiliation=owner,collaborator,organization_member&sort=pushed&direction=desc",
+        headers=headers
+    )
+    if repos_response.status_code != 200:
+        break
+    data = repos_response.json()
+    if not isinstance(data, list) or not data:
+        break
+    repos.extend(data)
+    if len(data) < 100:
+        break
+    page += 1
 
 repo_count = len(repos)
 total_stars = sum(repo.get("stargazers_count", 0) for repo in repos)
 
-# 3. Last 30 Days Commits
-thirty_days_ago = (datetime.datetime.now() - datetime.timedelta(days=30)).strftime("%Y-%m-%d")
-recent_commits_resp = requests.get(f"https://api.github.com/search/commits?q=author:{username}+committer-date:>{thirty_days_ago}", headers=headers)
-recent_commits = recent_commits_resp.json().get('total_count', 0) if recent_commits_resp.status_code == 200 else 0
-
-# 4. Languages
+# 3. Languages
 languages = {}
 for repo in repos:
     languages_url = repo.get("languages_url")
@@ -47,8 +73,158 @@ total_bytes = sum(languages.values())
 language_percentages = {lang: (count / total_bytes * 100) for lang, count in languages.items()} if total_bytes > 0 else {}
 top_languages = sorted(language_percentages.items(), key=lambda x: x[1], reverse=True)[:4]
 
+# 4. Fetch Commits Across ALL Branches for the Last 30 Days
+now_utc = datetime.datetime.now(datetime.timezone.utc)
+thirty_days_ago_dt = now_utc - datetime.timedelta(days=30)
+since_iso = thirty_days_ago_dt.strftime("%Y-%m-%dT00:00:00Z")
+
+print("Fetching commits for the last 30 days across all branches...")
+
+seen_shas = set()
+daily_counts = {}
+
+def process_commit(sha, commit_date_str, author_login, author_email, author_name, repo_owner):
+    if not sha or sha in seen_shas:
+        return
+    
+    author_login_l = (author_login or "").lower()
+    author_email_l = (author_email or "").lower()
+    author_name_l = (author_name or "").lower()
+    
+    is_user = False
+    if author_login_l and author_login_l == username.lower():
+        is_user = True
+    elif author_email_l and author_email_l in user_emails:
+        is_user = True
+    elif author_name_l and name and author_name_l == name.lower():
+        is_user = True
+    elif repo_owner.lower() == username.lower():
+        if author_email_l in user_emails or (name and author_name_l == name.lower()) or (not author_login_l and not author_email_l):
+            is_user = True
+            
+    if is_user:
+        seen_shas.add(sha)
+        if commit_date_str:
+            date_key = commit_date_str[:10]
+            daily_counts[date_key] = daily_counts.get(date_key, 0) + 1
+
+gql_query = """
+query($owner: String!, $name: String!, $since: GitTimestamp!) {
+  repository(owner: $owner, name: $name) {
+    refs(refPrefix: "refs/heads/", first: 100) {
+      nodes {
+        name
+        target {
+          ... on Commit {
+            history(since: $since, first: 100) {
+              nodes {
+                oid
+                committedDate
+                authoredDate
+                author {
+                  name
+                  email
+                  user {
+                    login
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+"""
+
+for repo in repos:
+    pushed_at_str = repo.get("pushed_at")
+    if not pushed_at_str:
+        continue
+    try:
+        pushed_at_dt = datetime.datetime.fromisoformat(pushed_at_str.replace("Z", "+00:00"))
+        if pushed_at_dt < thirty_days_ago_dt:
+            continue
+    except Exception:
+        pass
+    
+    owner = repo.get("owner", {}).get("login", "")
+    repo_name = repo.get("name", "")
+    if not owner or not repo_name:
+        continue
+
+    # Try GraphQL first for efficient multi-branch commit retrieval
+    gql_success = False
+    try:
+        variables = {"owner": owner, "name": repo_name, "since": since_iso}
+        gql_resp = requests.post(
+            "https://api.github.com/graphql",
+            json={"query": gql_query, "variables": variables},
+            headers=headers
+        )
+        if gql_resp.status_code == 200:
+            data = gql_resp.json().get("data", {})
+            repo_data = data.get("repository") if data else None
+            if repo_data and "refs" in repo_data and repo_data["refs"]:
+                gql_success = True
+                for ref_node in repo_data["refs"].get("nodes", []):
+                    target = ref_node.get("target")
+                    if not target or "history" not in target:
+                        continue
+                    for commit_node in target["history"].get("nodes", []):
+                        oid = commit_node.get("oid")
+                        commit_date = commit_node.get("authoredDate") or commit_node.get("committedDate")
+                        author_info = commit_node.get("author") or {}
+                        author_user = author_info.get("user") or {}
+                        author_login = author_user.get("login") or ""
+                        author_email = author_info.get("email") or ""
+                        author_name = author_info.get("name") or ""
+                        
+                        process_commit(oid, commit_date, author_login, author_email, author_name, owner)
+    except Exception as e:
+        print(f"GraphQL note for {owner}/{repo_name}: {e}")
+
+    # Fallback to REST API if GraphQL was unsuccessful
+    if not gql_success:
+        try:
+            branches_resp = requests.get(
+                f"https://api.github.com/repos/{owner}/{repo_name}/branches?per_page=100",
+                headers=headers
+            )
+            if branches_resp.status_code == 200:
+                branches = branches_resp.json()
+                if isinstance(branches, list):
+                    for branch in branches:
+                        bname = branch.get("name")
+                        if not bname:
+                            continue
+                        commits_resp = requests.get(
+                            f"https://api.github.com/repos/{owner}/{repo_name}/commits?sha={bname}&since={since_iso}&per_page=100",
+                            headers=headers
+                        )
+                        if commits_resp.status_code == 200:
+                            branch_commits = commits_resp.json()
+                            if isinstance(branch_commits, list):
+                                for item in branch_commits:
+                                    sha = item.get("sha")
+                                    commit_obj = item.get("commit", {})
+                                    commit_author = commit_obj.get("author", {})
+                                    commit_date = commit_author.get("date") or commit_obj.get("committer", {}).get("date")
+                                    author_obj = item.get("author") or {}
+                                    author_login = author_obj.get("login") or ""
+                                    author_email = commit_author.get("email") or ""
+                                    author_name = commit_author.get("name") or ""
+                                    
+                                    process_commit(sha, commit_date, author_login, author_email, author_name, owner)
+        except Exception as e:
+            print(f"REST note for {owner}/{repo_name}: {e}")
+
+recent_commits = len(seen_shas)
+print(f"Total commits found across all branches (last 30 days): {recent_commits}")
+
 # 5. Generate Professional stats.svg
-date_str = datetime.datetime.now().strftime("%d %b %Y")
+date_str = now_utc.strftime("%d %b %Y")
 svg = f"""<svg width="600" height="420" xmlns="http://www.w3.org/2000/svg">
     <style>
         .header {{ font: bold 22px 'Segoe UI', Arial, sans-serif; fill: #58a6ff; }}
@@ -103,53 +279,14 @@ with open("stats.svg", "w", encoding="utf-8") as f:
 print("Generated stats.svg successfully!")
 
 
-# 6. Fetch Commit Graph Data (All Branches) via Search API
-import datetime
-
-# Generate last 30 days list
-today = datetime.datetime.now()
-last_30_days_dates = [(today - datetime.timedelta(days=i)).strftime("%Y-%m-%d") for i in range(29, -1, -1)]
-commits_per_day = {d: 0 for d in last_30_days_dates}
-
-page = 1
-while True:
-    search_url = f"https://api.github.com/search/commits?q=author:{username}+committer-date:>{thirty_days_ago}&per_page=100&page={page}"
-    search_resp = requests.get(search_url, headers=headers)
-    if search_resp.status_code == 200:
-        data = search_resp.json()
-        items = data.get('items', [])
-        if not items:
-            break
-        for item in items:
-            commit_date_time = item.get('commit', {}).get('committer', {}).get('date', '')
-            if commit_date_time:
-                date_part = commit_date_time.split('T')[0]
-                try:
-                    time_part = commit_date_time.split('T')[1].replace('Z', '')
-                    time_part = time_part.split('+')[0].split('-')[0].split('.')[0]
-                    dt_str = f"{date_part}T{time_part}+0000"
-                    dt = datetime.datetime.strptime(dt_str, "%Y-%m-%dT%H:%M:%S%z")
-                except Exception:
-                    dt = None
-                
-                if dt:
-                    # Convert to local time
-                    local_dt = dt.astimezone()
-                    date_str = local_dt.strftime("%Y-%m-%d")
-                    
-                    if date_str in commits_per_day:
-                        commits_per_day[date_str] += 1
-
-        
-        if len(items) < 100 or page >= 10: # limit to 10 pages to avoid rate limits
-            break
-        page += 1
-    else:
-        print(f"Search API Error: {search_resp.text}")
-        break
-
-# Create last_30_days list with structure similar to old data
-last_30_days = [{'date': d, 'contributionCount': commits_per_day[d]} for d in last_30_days_dates]
+# 6. Generate Contribution Activity Graph (graph.svg)
+last_30_days = []
+for i in range(29, -1, -1):
+    d = (now_utc - datetime.timedelta(days=i)).strftime("%Y-%m-%d")
+    last_30_days.append({
+        "date": d,
+        "contributionCount": daily_counts.get(d, 0)
+    })
 
 # Graph dimensions and margins
 W, H = 800, 300
@@ -172,7 +309,7 @@ graph_svg = f"""<svg width="100%" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org
         .dot {{ fill: #ffffff; stroke: #38bdf8; stroke-width: 2; }}
     </style>
     <rect width="{W}" height="{H}" rx="12" class="bg" stroke="#30363d" stroke-width="1"/>
-    <text x="{W//2}" y="40" class="title" text-anchor="middle">{name}'s Commit Graph (All Branches)</text>
+    <text x="{W//2}" y="40" class="title" text-anchor="middle">{name}'s Last 30 Days Commits</text>
     
     <!-- Axis Titles -->
     <text x="25" y="{M_TOP + GH//2}" class="axis-label" text-anchor="middle" transform="rotate(-90 25,{M_TOP + GH//2})">Commits</text>
@@ -188,8 +325,8 @@ if y_max not in y_ticks: y_ticks.append(y_max)
 
 for val in y_ticks:
     y = M_TOP + GH - (val / y_max) * GH
-    graph_svg += f'    <line x1="{M_LEFT}" y1="{y}" x2="{M_LEFT + GW}" y2="{y}" class="grid"/>\\n'
-    graph_svg += f'    <text x="{M_LEFT - 15}" y="{y + 4}" class="tick-label" text-anchor="end">{val}</text>\\n'
+    graph_svg += f'    <line x1="{M_LEFT}" y1="{y}" x2="{M_LEFT + GW}" y2="{y}" class="grid"/>\n'
+    graph_svg += f'    <text x="{M_LEFT - 15}" y="{y + 4}" class="tick-label" text-anchor="end">{val}</text>\n'
     
 # Vertical grid lines, X-axis labels, and points
 points = []
@@ -201,19 +338,19 @@ for i, day in enumerate(last_30_days):
     
     # X-axis tick
     day_num = int(day['date'][-2:])
-    graph_svg += f'    <line x1="{x}" y1="{M_TOP}" x2="{x}" y2="{M_TOP + GH}" class="grid"/>\\n'
-    graph_svg += f'    <text x="{x}" y="{M_TOP + GH + 20}" class="tick-label" text-anchor="middle">{day_num}</text>\\n'
+    graph_svg += f'    <line x1="{x}" y1="{M_TOP}" x2="{x}" y2="{M_TOP + GH}" class="grid"/>\n'
+    graph_svg += f'    <text x="{x}" y="{M_TOP + GH + 20}" class="tick-label" text-anchor="middle">{day_num}</text>\n'
     
 path_d = "M " + " L ".join(points)
-graph_svg += f'    <path d="{path_d}" class="line" />\\n'
+graph_svg += f'    <path d="{path_d}" class="line" />\n'
 
 # Draw interactive dots
 for p, day in zip(points, last_30_days):
     px, py = p.split(',')
     count = day['contributionCount']
-    graph_svg += f'    <g><title>{count} commits on {day["date"]}</title>\\n'
-    graph_svg += f'        <circle cx="{px}" cy="{py}" r="4" class="dot"/>\\n'
-    graph_svg += f'    </g>\\n'
+    graph_svg += f'    <g><title>{count} commits on {day["date"]}</title>\n'
+    graph_svg += f'        <circle cx="{px}" cy="{py}" r="4" class="dot"/>\n'
+    graph_svg += f'    </g>\n'
     
 graph_svg += "</svg>"
 

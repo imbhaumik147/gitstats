@@ -40,9 +40,9 @@ To show these cards on your main GitHub profile (`username/username`), add this 
   <img src="https://raw.githubusercontent.com/YOUR_USERNAME/gitstats/main/stats.svg?v=3" alt="GitHub Stats" />
 </p>
 
-# 📈 Contribution Graph (Last 30 Days)
+# 📈 Last 30 Days Commits
 <p align="center">
-  <img src="https://raw.githubusercontent.com/YOUR_USERNAME/gitstats/main/graph.svg?v=3" width="100%" alt="30 Day Activity Graph" />
+  <img src="https://raw.githubusercontent.com/YOUR_USERNAME/gitstats/main/graph.svg?v=3" width="100%" alt="Last 30 Days Commits" />
 </p>
 ```
 *(Remember to replace `YOUR_USERNAME` with your actual GitHub username!)*
