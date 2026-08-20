@@ -25,7 +25,7 @@
     <text x="300" y="175" class="box-text" text-anchor="middle">STARS</text>
     
     <rect x="400" y="110" width="160" height="80" class="box" />
-    <text x="480" y="150" class="box-num" text-anchor="middle">170</text>
+    <text x="480" y="150" class="box-num" text-anchor="middle">171</text>
     <text x="480" y="175" class="box-text" text-anchor="middle">COMMITS (30D)</text>
     
     <!-- Languages -->
