@@ -21,8 +21,10 @@ user = response.json()
 username = user.get("login")
 name = user.get("name") or username
 
-# Collect user emails for commit matching
+# Collect user emails and names for commit matching
 user_emails = set()
+name_clean = (user.get("name") or username).strip()
+user_names = {name_clean.lower(), username.lower()}
 if user.get("email"):
     user_emails.add(user["email"].lower())
 user_emails.add(f"{username}@users.noreply.github.com".lower())
@@ -43,7 +45,14 @@ repos = []
 page = 1
 while True:
     repos_response = requests.get(
-        f"https://api.github.com/user/repos?per_page=100&page={page}&affiliation=owner,collaborator,organization_member&sort=pushed&direction=desc",
+        "https://api.github.com/user/repos",
+        params={
+            "per_page": 100,
+            "page": page,
+            "affiliation": "owner,collaborator,organization_member",
+            "sort": "pushed",
+            "direction": "desc"
+        },
         headers=headers
     )
     if repos_response.status_code != 200:
@@ -77,51 +86,122 @@ top_languages = sorted(language_percentages.items(), key=lambda x: x[1], reverse
 now_utc = datetime.datetime.now(datetime.timezone.utc)
 thirty_days_ago_dt = now_utc - datetime.timedelta(days=30)
 since_iso = thirty_days_ago_dt.strftime("%Y-%m-%dT00:00:00Z")
-
-print("Fetching commits for the last 30 days across all branches...")
+thirty_days_ago_date = thirty_days_ago_dt.strftime("%Y-%m-%d")
 
 seen_shas = set()
 daily_counts = {}
 
-def process_commit(sha, commit_date_str, author_login, author_email, author_name, repo_owner):
+def process_commit(sha, commit_date_str, author_login, author_email, author_name, committer_login, committer_email, committer_name, repo_owner):
     if not sha or sha in seen_shas:
         return
     
-    author_login_l = (author_login or "").lower()
-    author_email_l = (author_email or "").lower()
-    author_name_l = (author_name or "").lower()
+    # Filter by date window
+    if commit_date_str:
+        try:
+            dt = datetime.datetime.fromisoformat(commit_date_str.replace("Z", "+00:00"))
+            if dt < thirty_days_ago_dt:
+                return
+        except Exception:
+            pass
+
+    a_login = (author_login or "").lower()
+    c_login = (committer_login or "").lower()
+    a_email = (author_email or "").lower()
+    c_email = (committer_email or "").lower()
+    a_name = (author_name or "").strip().lower()
+    c_name = (committer_name or "").strip().lower()
+    u_login = username.lower()
     
     is_user = False
-    if author_login_l and author_login_l == username.lower():
+    if a_login == u_login or c_login == u_login:
         is_user = True
-    elif author_email_l and author_email_l in user_emails:
+    elif a_email in user_emails or c_email in user_emails:
         is_user = True
-    elif author_name_l and name and author_name_l == name.lower():
+    elif (a_name and a_name in user_names) or (c_name and c_name in user_names):
         is_user = True
-    elif repo_owner.lower() == username.lower():
-        if author_email_l in user_emails or (name and author_name_l == name.lower()) or (not author_login_l and not author_email_l):
+    elif repo_owner.lower() == u_login:
+        # In repositories owned by the user, if the commit is not attributed to another user account
+        other_user = (a_login and a_login != u_login) or (c_login and c_login != u_login and c_login != "web-flow")
+        if not other_user:
             is_user = True
             
     if is_user:
         seen_shas.add(sha)
+        if a_email:
+            user_emails.add(a_email)
+        if c_email:
+            user_emails.add(c_email)
+        if a_name:
+            user_names.add(a_name)
+        if c_name:
+            user_names.add(c_name)
         if commit_date_str:
             date_key = commit_date_str[:10]
             daily_counts[date_key] = daily_counts.get(date_key, 0) + 1
 
+# Step A: Discover user commits and learn git email identities via Search API
+print("Discovering user commits and email identities via Search API...")
+search_page = 1
+while search_page <= 10:
+    try:
+        search_resp = requests.get(
+            f"https://api.github.com/search/commits?q=author:{username}+committer-date:>={thirty_days_ago_date}&per_page=100&page={search_page}",
+            headers=headers
+        )
+        if search_resp.status_code != 200:
+            break
+        items = search_resp.json().get("items", [])
+        if not items:
+            break
+        for item in items:
+            sha = item.get("sha")
+            c_obj = item.get("commit", {})
+            c_author = c_obj.get("author", {})
+            c_committer = c_obj.get("committer", {})
+            a_obj = item.get("author") or {}
+            cm_obj = item.get("committer") or {}
+            r_owner = item.get("repository", {}).get("owner", {}).get("login", "")
+            
+            c_date = c_author.get("date") or c_committer.get("date")
+            process_commit(
+                sha, c_date,
+                a_obj.get("login"), c_author.get("email"), c_author.get("name"),
+                cm_obj.get("login"), c_committer.get("email"), c_committer.get("name"),
+                r_owner
+            )
+        if len(items) < 100:
+            break
+        search_page += 1
+    except Exception as e:
+        print(f"Search API note: {e}")
+        break
+
+print(f"Learned user emails: {user_emails}")
+
+# Step B: Fetch commits across ALL branches for all repositories
+print(f"Scanning all branches across {len(repos)} repositories...")
+
 gql_query = """
-query($owner: String!, $name: String!, $since: GitTimestamp!) {
+query($owner: String!, $name: String!) {
   repository(owner: $owner, name: $name) {
     refs(refPrefix: "refs/heads/", first: 100) {
       nodes {
         name
         target {
           ... on Commit {
-            history(since: $since, first: 100) {
+            history(first: 100) {
               nodes {
                 oid
                 committedDate
                 authoredDate
                 author {
+                  name
+                  email
+                  user {
+                    login
+                  }
+                }
+                committer {
                   name
                   email
                   user {
@@ -139,84 +219,95 @@ query($owner: String!, $name: String!, $since: GitTimestamp!) {
 """
 
 for repo in repos:
-    pushed_at_str = repo.get("pushed_at")
-    if not pushed_at_str:
-        continue
-    try:
-        pushed_at_dt = datetime.datetime.fromisoformat(pushed_at_str.replace("Z", "+00:00"))
-        if pushed_at_dt < thirty_days_ago_dt:
-            continue
-    except Exception:
-        pass
-    
     owner = repo.get("owner", {}).get("login", "")
     repo_name = repo.get("name", "")
     if not owner or not repo_name:
         continue
 
-    # Try GraphQL first for efficient multi-branch commit retrieval
+    # Try GraphQL first for efficient multi-branch retrieval
     gql_success = False
     try:
-        variables = {"owner": owner, "name": repo_name, "since": since_iso}
         gql_resp = requests.post(
             "https://api.github.com/graphql",
-            json={"query": gql_query, "variables": variables},
+            json={"query": gql_query, "variables": {"owner": owner, "name": repo_name}},
             headers=headers
         )
         if gql_resp.status_code == 200:
             data = gql_resp.json().get("data", {})
             repo_data = data.get("repository") if data else None
             if repo_data and "refs" in repo_data and repo_data["refs"]:
-                gql_success = True
-                for ref_node in repo_data["refs"].get("nodes", []):
-                    target = ref_node.get("target")
-                    if not target or "history" not in target:
-                        continue
-                    for commit_node in target["history"].get("nodes", []):
-                        oid = commit_node.get("oid")
-                        commit_date = commit_node.get("authoredDate") or commit_node.get("committedDate")
-                        author_info = commit_node.get("author") or {}
-                        author_user = author_info.get("user") or {}
-                        author_login = author_user.get("login") or ""
-                        author_email = author_info.get("email") or ""
-                        author_name = author_info.get("name") or ""
-                        
-                        process_commit(oid, commit_date, author_login, author_email, author_name, owner)
+                nodes = repo_data["refs"].get("nodes", [])
+                if nodes:
+                    gql_success = True
+                    for ref_node in nodes:
+                        target = ref_node.get("target")
+                        if not target or "history" not in target:
+                            continue
+                        for commit_node in target["history"].get("nodes", []):
+                            oid = commit_node.get("oid")
+                            commit_date = commit_node.get("authoredDate") or commit_node.get("committedDate")
+                            a_info = commit_node.get("author") or {}
+                            a_user = a_info.get("user") or {}
+                            cm_info = commit_node.get("committer") or {}
+                            cm_user = cm_info.get("user") or {}
+                            
+                            process_commit(
+                                oid, commit_date,
+                                a_user.get("login"), a_info.get("email"), a_info.get("name"),
+                                cm_user.get("login"), cm_info.get("email"), cm_info.get("name"),
+                                owner
+                            )
     except Exception as e:
         print(f"GraphQL note for {owner}/{repo_name}: {e}")
 
     # Fallback to REST API if GraphQL was unsuccessful
     if not gql_success:
         try:
-            branches_resp = requests.get(
-                f"https://api.github.com/repos/{owner}/{repo_name}/branches?per_page=100",
-                headers=headers
-            )
-            if branches_resp.status_code == 200:
-                branches = branches_resp.json()
-                if isinstance(branches, list):
-                    for branch in branches:
-                        bname = branch.get("name")
-                        if not bname:
-                            continue
-                        commits_resp = requests.get(
-                            f"https://api.github.com/repos/{owner}/{repo_name}/commits?sha={bname}&since={since_iso}&per_page=100",
-                            headers=headers
-                        )
-                        if commits_resp.status_code == 200:
-                            branch_commits = commits_resp.json()
-                            if isinstance(branch_commits, list):
-                                for item in branch_commits:
-                                    sha = item.get("sha")
-                                    commit_obj = item.get("commit", {})
-                                    commit_author = commit_obj.get("author", {})
-                                    commit_date = commit_author.get("date") or commit_obj.get("committer", {}).get("date")
-                                    author_obj = item.get("author") or {}
-                                    author_login = author_obj.get("login") or ""
-                                    author_email = commit_author.get("email") or ""
-                                    author_name = commit_author.get("name") or ""
-                                    
-                                    process_commit(sha, commit_date, author_login, author_email, author_name, owner)
+            branches = []
+            b_page = 1
+            while True:
+                branches_resp = requests.get(
+                    f"https://api.github.com/repos/{owner}/{repo_name}/branches",
+                    params={"per_page": 100, "page": b_page},
+                    headers=headers
+                )
+                if branches_resp.status_code != 200:
+                    break
+                b_data = branches_resp.json()
+                if not isinstance(b_data, list) or not b_data:
+                    break
+                branches.extend(b_data)
+                if len(b_data) < 100:
+                    break
+                b_page += 1
+
+            for branch in branches:
+                bname = branch.get("name")
+                if not bname:
+                    continue
+                commits_resp = requests.get(
+                    f"https://api.github.com/repos/{owner}/{repo_name}/commits",
+                    params={"sha": bname, "since": since_iso, "per_page": 100},
+                    headers=headers
+                )
+                if commits_resp.status_code == 200:
+                    branch_commits = commits_resp.json()
+                    if isinstance(branch_commits, list):
+                        for item in branch_commits:
+                            sha = item.get("sha")
+                            commit_obj = item.get("commit", {})
+                            commit_author = commit_obj.get("author", {})
+                            commit_committer = commit_obj.get("committer", {})
+                            author_obj = item.get("author") or {}
+                            committer_obj = item.get("committer") or {}
+                            commit_date = commit_author.get("date") or commit_committer.get("date")
+                            
+                            process_commit(
+                                sha, commit_date,
+                                author_obj.get("login"), commit_author.get("email"), commit_author.get("name"),
+                                committer_obj.get("login"), commit_committer.get("email"), commit_committer.get("name"),
+                                owner
+                            )
         except Exception as e:
             print(f"REST note for {owner}/{repo_name}: {e}")
 
