@@ -36,7 +36,7 @@
     <text x="540" y="270" class="lang-pct">56.3%</text>
     <text x="40" y="300" class="lang-text">HTML</text>
     <rect x="170" y="290" width="300" height="10" rx="5" fill="#21262d"/>
-    <rect x="170" y="290" width="53" height="10" rx="5" fill="#4F5D95"/>
+    <rect x="170" y="290" width="54" height="10" rx="5" fill="#4F5D95"/>
     <text x="540" y="300" class="lang-pct">18.0%</text>
     <text x="40" y="330" class="lang-text">Python</text>
     <rect x="170" y="320" width="300" height="10" rx="5" fill="#21262d"/>
