@@ -25,7 +25,7 @@
     <text x="300" y="175" class="box-text" text-anchor="middle">STARS</text>
     
     <rect x="400" y="110" width="160" height="80" class="box" />
-    <text x="480" y="150" class="box-num" text-anchor="middle">150</text>
+    <text x="480" y="150" class="box-num" text-anchor="middle">157</text>
     <text x="480" y="175" class="box-text" text-anchor="middle">COMMITS (30D)</text>
     
     <!-- Languages -->
@@ -41,7 +41,7 @@
     <text x="40" y="330" class="lang-text">HTML</text>
     <rect x="170" y="320" width="300" height="10" rx="5" fill="#21262d"/>
     <rect x="170" y="320" width="42" height="10" rx="5" fill="#00B4AB"/>
-    <text x="540" y="330" class="lang-pct">14.2%</text>
+    <text x="540" y="330" class="lang-pct">14.1%</text>
     <text x="40" y="360" class="lang-text">JavaScript</text>
     <rect x="170" y="350" width="300" height="10" rx="5" fill="#21262d"/>
     <rect x="170" y="350" width="38" height="10" rx="5" fill="#e34c26"/>
